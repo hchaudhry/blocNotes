@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.talsoft.organizeme"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="14" />
+    
+    
+    <uses-feature  
+        android:name="android.hardwoare.camera"
+    	android:required="true"/>
+    
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="Organize me" >
+         <activity android:name="fr.esgi.android.activities.TagListActivity">
+              <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+         </activity>
+         <activity android:name="fr.esgi.android.activities.LogInActivity"></activity>
+         <activity android:name="fr.esgi.android.activities.TaskListActivity"></activity>
+         <activity android:name="fr.esgi.android.activities.CreateTaskActivity"></activity>
+         <activity android:name="fr.esgi.android.activities.HomeActivity"></activity>
+         <activity android:name="fr.esgi.android.activities.CreateTagActivity"></activity>
+         <activity android:name="fr.esgi.android.activities.NoteListActivity"></activity>
+         <activity android:name="fr.esgi.android.activities.CreateNoteActivity"></activity>
+         <activity android:name="fr.esgi.android.activities.AudioRecordingActivity"></activity>
+    </application>
+
+</manifest>
