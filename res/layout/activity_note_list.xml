@@ -1,13 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-      <ListView
+    android:layout_height="match_parent">
+
+    <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="259dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/add_new_note"
+        android:layout_weight="1.09" >
+
     </ListView>
 
-</LinearLayout>
+    <EditText
+        android:id="@+id/searchNoteInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:ems="10" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/searchNoteInput"
+        android:layout_toRightOf="@+id/searchNoteInput"
+        android:text="Recherche" />
+
+    <Button
+        android:id="@+id/add_new_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/searchNoteInput"
+        android:layout_marginTop="14dp"
+        android:text="Nouvelle note" />
+
+</RelativeLayout>

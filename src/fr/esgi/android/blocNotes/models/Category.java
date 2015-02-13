@@ -1,6 +1,6 @@
-package fr.esgi.android.models;
+package fr.esgi.android.blocNotes.models;
 
-public class Tag {
+public class Category {
 
 	private int id;
 	private String name;

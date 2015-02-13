@@ -1,17 +1,15 @@
-package fr.esgi.android.datas;
+package fr.esgi.android.blocNotes.datas;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import fr.esgi.android.models.Note;
-import fr.esgi.android.models.Tag;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+import fr.esgi.android.blocNotes.models.Category;
+import fr.esgi.android.blocNotes.models.Note;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
@@ -62,7 +60,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 	// CRUD Category
 
-	public void addTag(Tag tag) {
+	public void addTag(Category tag) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -73,7 +71,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		db.close();
 	}
 
-	public Tag getTag(int id) {
+	public Category getTag(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_CATEGORIES, CATEGORIES_COLUMNS,
@@ -83,25 +81,25 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		Tag tag = new Tag();
+		Category tag = new Category();
 		tag.setId(Integer.parseInt(cursor.getString(0)));
 		tag.setName(cursor.getString(1));
 
 		return tag;
 	}
 
-	public List<Tag> getAllTags() {
-		List<Tag> tags = new LinkedList<Tag>();
+	public List<Category> getAllTags() {
+		List<Category> tags = new LinkedList<Category>();
 
 		String query = "SELECT  * FROM " + TABLE_CATEGORIES;
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
 
-		Tag tag = null;
+		Category tag = null;
 		if (cursor.moveToFirst()) {
 			do {
-				tag = new Tag();
+				tag = new Category();
 				tag.setId(Integer.parseInt(cursor.getString(0)));
 				tag.setName(cursor.getString(1));
 
@@ -112,7 +110,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		return tags;
 	}
 
-	public int updateCategory(Tag tag) {
+	public int updateCategory(Category tag) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -127,7 +125,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public void deleteCategory(Tag tag) {
+	public void deleteCategory(Category tag) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		db.delete(TABLE_CATEGORIES, KEY_ID_CATEGORY + " = ?",

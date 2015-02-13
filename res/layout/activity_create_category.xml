@@ -33,24 +33,4 @@
         android:layout_marginTop="43dp"
         android:text="Créer" />
 
-    <Button
-        android:id="@+id/categoryEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/categoryAdd"
-        android:layout_alignRight="@+id/categoryAdd"
-        android:layout_below="@+id/categoryAdd"
-        android:layout_marginTop="27dp"
-        android:text="Modifier" />
-
-    <Button
-        android:id="@+id/categoryDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/categoryEdit"
-        android:layout_alignRight="@+id/categoryEdit"
-        android:layout_below="@+id/categoryEdit"
-        android:layout_marginTop="33dp"
-        android:text="Supprimer" />
-
 </RelativeLayout>

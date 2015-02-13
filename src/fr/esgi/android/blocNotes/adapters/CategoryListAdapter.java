@@ -1,30 +1,27 @@
-package fr.esgi.android.adapters;
+package fr.esgi.android.blocNotes.adapters;
 
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import fr.esgi.android.blocNotes.R;
+import fr.esgi.android.blocNotes.models.Category;
 
-import com.talsoft.organizeme.R;
-
-import fr.esgi.android.models.Tag;
-
-public class TagListAdapter  extends BaseAdapter
+public class CategoryListAdapter  extends BaseAdapter
 {
 	private Context context;
-	private List<Tag> tags;
+	private List<Category> categories;
 	private LayoutInflater inflater;
 	
 	
-	public TagListAdapter(Context context, List<Tag> tags)
+	public CategoryListAdapter(Context context, List<Category> categories)
 	{
 		this.context = context;
-		this.tags = tags;
+		this.categories = categories;
 		this.inflater = LayoutInflater.from(context);
 	}
 	
@@ -32,14 +29,14 @@ public class TagListAdapter  extends BaseAdapter
 	@Override
 	public int getCount() 
 	{
-		return tags.size();
+		return categories.size();
 	}
 	
 	
 	@Override
 	public Object getItem(int position) 
 	{
-		return tags.get(position);
+		return categories.get(position);
 	}
 	
 	
@@ -55,15 +52,15 @@ public class TagListAdapter  extends BaseAdapter
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) 
 	{
-		Tag tag = (Tag) getItem(position);
+		Category tag = (Category) getItem(position);
 		
-		convertView = inflater.inflate(R.layout.list_view_tag,null);
+		convertView = inflater.inflate(R.layout.list_view_category,null);
 		
 		TextView tagName = (TextView) convertView.findViewById(R.id.tagNameTextView);
 		tagName.setText(tag.getName()); 
 		
-		TextView tagId = (TextView) convertView.findViewById(R.id.tagIdTextView);
-		tagId.setText(String.valueOf(tag.getId()));
+//		TextView tagId = (TextView) convertView.findViewById(R.id.tagIdTextView);
+//		tagId.setText(String.valueOf(tag.getId()));
 		
 		return convertView;
 	}
