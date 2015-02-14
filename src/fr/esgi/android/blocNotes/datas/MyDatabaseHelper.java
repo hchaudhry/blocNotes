@@ -60,18 +60,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 	// CRUD Category
 
-	public void addTag(Category tag) {
+	public void addTag(Category category) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_NAME_CATEGORY, tag.getName());
+		values.put(KEY_NAME_CATEGORY, category.getName());
 
 		db.insert(TABLE_CATEGORIES, null, values);
 
 		db.close();
 	}
 
-	public Category getTag(int id) {
+	public Category getCategory(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_CATEGORIES, CATEGORIES_COLUMNS,
@@ -81,43 +81,43 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		Category tag = new Category();
-		tag.setId(Integer.parseInt(cursor.getString(0)));
-		tag.setName(cursor.getString(1));
+		Category category = new Category();
+		category.setId(Integer.parseInt(cursor.getString(0)));
+		category.setName(cursor.getString(1));
 
-		return tag;
+		return category;
 	}
 
-	public List<Category> getAllTags() {
-		List<Category> tags = new LinkedList<Category>();
+	public List<Category> getAllCategories() {
+		List<Category> categories = new LinkedList<Category>();
 
 		String query = "SELECT  * FROM " + TABLE_CATEGORIES;
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
 
-		Category tag = null;
+		Category category = null;
 		if (cursor.moveToFirst()) {
 			do {
-				tag = new Category();
-				tag.setId(Integer.parseInt(cursor.getString(0)));
-				tag.setName(cursor.getString(1));
+				category = new Category();
+				category.setId(Integer.parseInt(cursor.getString(0)));
+				category.setName(cursor.getString(1));
 
-				tags.add(tag);
+				categories.add(category);
 			} while (cursor.moveToNext());
 		}
 
-		return tags;
+		return categories;
 	}
 
-	public int updateCategory(Category tag) {
+	public int updateCategory(Category category) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put("name", tag.getName());
+		values.put("name", category.getName());
 
 		int i = db.update(TABLE_CATEGORIES, values, KEY_ID_CATEGORY + " = ?",
-				new String[] { String.valueOf(tag.getId()) });
+				new String[] { String.valueOf(category.getId()) });
 
 		db.close();
 
@@ -125,15 +125,40 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public void deleteCategory(Category tag) {
+	public void deleteCategory(int idCategory) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
+		// Notes
+		db.delete(TABLE_NOTES, KEY_ID_CATEGORY_NOTES + " = ?",
+				new String[] { String.valueOf(idCategory) });
+		// Category
 		db.delete(TABLE_CATEGORIES, KEY_ID_CATEGORY + " = ?",
-				new String[] { String.valueOf(tag.getId()) });
+				new String[] { String.valueOf(idCategory) });
 		db.close();
 
 	}
+	
+	public List<Category> getCategoriesForSearch(String categoryName) {
+		List<Category> categories = new LinkedList<Category>();
 
+		String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE name LIKE '%" + categoryName + "%'";
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(query, null);
+
+		Category category = null;
+		if (cursor.moveToFirst()) {
+			do {
+				category = new Category();
+				category.setId(Integer.parseInt(cursor.getString(0)));
+				category.setName(cursor.getString(1));
+
+				categories.add(category);
+			} while (cursor.moveToNext());
+		}
+
+		return categories;
+	}
 	// CRUD Notes
 
 	public void addNote(Note note) {

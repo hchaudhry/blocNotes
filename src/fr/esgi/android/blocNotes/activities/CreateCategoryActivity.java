@@ -16,6 +16,8 @@ public class CreateCategoryActivity extends Activity {
 	private EditText categoryName;
 	private Button categoryAdd;
 	private MyDatabaseHelper db;
+	private boolean modifyFlag = false;
+	int categoryIdFromList = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +28,16 @@ public class CreateCategoryActivity extends Activity {
 		setTitle("Catégorie");
 
 		categoryName = (EditText) findViewById(R.id.tagNameEditText);
+		categoryAdd = (Button) findViewById(R.id.categoryAdd);
 		
 		if (this.getIntent().getStringExtra("categoryName") != null) {
 			String categoryNameFromList = this.getIntent().getStringExtra("categoryName");
+			categoryIdFromList = this.getIntent().getIntExtra("categoryId", 1);
+			modifyFlag = this.getIntent().getBooleanExtra("modifyFlag", false);
 			categoryName.setText(categoryNameFromList);
+			
+			categoryAdd.setText("Modifier");
 		}
-		
-		categoryAdd = (Button) findViewById(R.id.categoryAdd);
 		
 		db = new MyDatabaseHelper(this);
 
@@ -43,8 +48,15 @@ public class CreateCategoryActivity extends Activity {
 				Category toCreate = new Category();
 				toCreate.setName(categoryName.getText().toString());
 
-				// add task created
-				db.addTag(toCreate);
+				if (modifyFlag == true) {
+					toCreate.setId(categoryIdFromList);
+					// update
+					db.updateCategory(toCreate);
+				}
+				else {
+					// add task created
+					db.addTag(toCreate);
+				}
 				
 				Intent intent = new Intent();
 				setResult(2,intent);  
