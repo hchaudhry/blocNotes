@@ -22,7 +22,9 @@ public class CreateNoteActivity extends Activity
 	private Note toCreate;
 	private Button noteAdd;
 	private MyDatabaseHelper db;
+	private boolean modifyFlag = false;
 	private int categoryId;
+	int noteId=0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -39,6 +41,13 @@ public class CreateNoteActivity extends Activity
 		
 		noteAdd = (Button) findViewById(R.id.btnCreateNote);
 		
+		if (this.getIntent().getStringExtra("noteName") !=null){
+			String noteName = this.getIntent().getStringExtra("noteName");
+			noteId=this.getIntent().getIntExtra("noteId", 1);
+			modifyFlag=this.getIntent().getBooleanExtra("modifyFlag", false);
+			noteTitle.setText(noteName);
+			noteAdd.setText("modifier");
+		}
 		db = new MyDatabaseHelper(this);
 
 		categoryId = this.getIntent().getIntExtra("categoryId", 1);
@@ -50,8 +59,20 @@ public class CreateNoteActivity extends Activity
 				Note toCreate = new Note();
 				toCreate.setTitle(noteTitle.getText().toString());
 				toCreate.setCategoryId(categoryId);
-				// add task created
-				db.addNote(toCreate);
+				
+				// update or add note
+				if(modifyFlag==true){
+					//update note
+					toCreate.setId(noteId);
+					db.updateNote(toCreate);
+					
+					
+				}
+				else{ 
+					//Add note
+					db.addNote(toCreate);
+					
+				}
 				
 				Intent intent = new Intent();
 				setResult(2,intent);  

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import fr.esgi.android.blocNotes.models.Category;
 import fr.esgi.android.blocNotes.models.Note;
 
@@ -91,7 +92,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	public List<Category> getAllCategories() {
 		List<Category> categories = new LinkedList<Category>();
 
-		String query = "SELECT  * FROM " + TABLE_CATEGORIES;
+		String query = "SELECT  * FROM " + TABLE_CATEGORIES +" ORDER BY name ";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
@@ -141,7 +142,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	public List<Category> getCategoriesForSearch(String categoryName) {
 		List<Category> categories = new LinkedList<Category>();
 
-		String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE name LIKE '%" + categoryName + "%'";
+		String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE title LIKE '%" + categoryName + "%'";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
@@ -192,7 +193,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	public List<Note> getAllNotes() {
 		List<Note> notes = new LinkedList<Note>();
 
-		String query = "SELECT  * FROM " + TABLE_NOTES;
+		String query = "SELECT  * FROM " + TABLE_NOTES + " ORDER BY name DESC";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
@@ -217,8 +218,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		Cursor cursor = db.query(TABLE_NOTES, NOTES_COLUMNS, " categoryId = ?",
-				new String[] { String.valueOf(categoryId) }, null, null, null,
-				null);
+				new String[] { String.valueOf(categoryId) }, null, null, KEY_TITLE_NOTES);
 
 		Note note = null;
 		if (cursor.moveToFirst()) {
@@ -251,10 +251,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public void deleteNote(Note note) {
+		Log.i("etape1","");
 		SQLiteDatabase db = this.getWritableDatabase();
-
+		Log.i("etape2","");
+		
 		db.delete(TABLE_NOTES, KEY_ID_NOTES + " = ?",
 				new String[] { String.valueOf(note.getId()) });
+		Log.i("etape3","");
 
 		db.close();
 	}

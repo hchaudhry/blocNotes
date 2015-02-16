@@ -3,6 +3,7 @@ package fr.esgi.android.blocNotes.activities;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;
@@ -47,6 +48,7 @@ public class CategoryListActivity extends ListActivity {
 			public void onClick(View v) {
 				createCategoryIntent = new Intent(CategoryListActivity.this,
 						CreateCategoryActivity.class);
+				
 				startActivityForResult(createCategoryIntent, 2);
 			}
 		});
