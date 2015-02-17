@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Note implements Serializable
 {
 	private int id;
-	private String title;
+	private String title , text;
 	private int categoryId;
 
 
@@ -27,6 +27,17 @@ public class Note implements Serializable
 	public void setTitle(String title) 
 	{
 		this.title = title;
+	}
+	
+	public String getText() 
+	{
+		return text;
+	}
+
+	
+	public void setText(String text) 
+	{
+		this.text = text;
 	}
 	
 	public int getCategoryId() {

@@ -1,11 +1,8 @@
 package fr.esgi.android.blocNotes.activities;
 
-import android.R.integer;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.EditText;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -14,12 +11,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 import fr.esgi.android.blocNotes.R;
-import fr.esgi.android.blocNotes.adapters.CategoryListAdapter;
 import fr.esgi.android.blocNotes.adapters.NoteListAdapter;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
-import fr.esgi.android.blocNotes.models.Category;
 import fr.esgi.android.blocNotes.models.Note;
 
 public class NoteListActivity extends ListActivity
@@ -46,8 +44,7 @@ public class NoteListActivity extends ListActivity
 		categoryId = this.getIntent().getIntExtra("categoryId", 1);
 
 		db = new MyDatabaseHelper(this);
-		noteAdapter = new NoteListAdapter(NoteListActivity.this,db.getAllNotesForCategory(categoryId));
-		setListAdapter(noteAdapter);
+		noteSearchForCategory();
 
 		noteButton = (Button) findViewById(R.id.add_new_note);
 		noteSearchButton = (Button) findViewById(R.id.noteBtnSearch);
@@ -56,7 +53,15 @@ public class NoteListActivity extends ListActivity
 
 			@Override
 			public void onClick(View v) {
-				noteSearch(noteSearchInput.getText().toString());
+				if(noteSearchButton.getText().equals("Recherche")){
+					noteSearch(noteSearchInput.getText().toString());
+					noteSearchButton.setText("Annuler");
+					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
+				}else if (noteSearchButton.getText().equals("Annuler")){
+					noteSearchForCategory();
+					noteSearchButton.setText("Recherche");
+					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
+				}
 
 			}
 
@@ -78,10 +83,14 @@ public class NoteListActivity extends ListActivity
 
 	}
 
+	private void noteSearchForCategory(){
+		noteAdapter = new NoteListAdapter(NoteListActivity.this,db.getAllNotesForCategory(categoryId));
+		setListAdapter(noteAdapter);
+	}
 
 	private void noteSearch(String string) {
 
-		noteAdapter = new NoteListAdapter(NoteListActivity.this, db.getNotesForSearch(noteSearchInput.getText().toString(),categoryId));
+		noteAdapter = new NoteListAdapter(NoteListActivity.this, db.getNotesForSearch(string,categoryId));
 		setListAdapter(noteAdapter);
 
 	}
@@ -128,6 +137,7 @@ public class NoteListActivity extends ListActivity
 
 			Intent modifyNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
 			modifyNoteIntent.putExtra("noteName", not.getTitle());
+			modifyNoteIntent.putExtra("noteText", not.getText());
 			modifyNoteIntent.putExtra("noteId", not.getId());
 			modifyNoteIntent.putExtra("modifyFlag", true);
 			startActivityForResult(modifyNoteIntent, 2);

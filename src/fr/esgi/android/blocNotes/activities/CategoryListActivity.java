@@ -14,6 +14,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.adapters.CategoryListAdapter;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
@@ -37,9 +38,7 @@ public class CategoryListActivity extends ListActivity {
 		setTitle("Mes Catégories");
 
 		db = new MyDatabaseHelper(this);
-		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this,
-				db.getAllCategories());
-		setListAdapter(categoryAdapter);
+		SearchAllCategory();
 
 		categoryButton = (Button) findViewById(R.id.add_new_caterory);
 
@@ -62,10 +61,25 @@ public class CategoryListActivity extends ListActivity {
 			
 			@Override
 			public void onClick(View v) {
-				categorySearch(categorySearchInput.getText().toString());
+				if(categorySearchButton.getText().equals("Recherche")){
+					categorySearch(categorySearchInput.getText().toString());
+					categorySearchButton.setText("Annuler");
+					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
+				}else if (categorySearchButton.getText().equals("Annuler")){
+					SearchAllCategory();
+					categorySearchButton.setText("Recherche");
+					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
+				}
 				
 			}
 		});
+	}
+
+	protected void SearchAllCategory() {
+		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this,
+				db.getAllCategories());
+		setListAdapter(categoryAdapter);
+		
 	}
 
 	protected void onListItemClick(ListView l, View v, int position, long id) {

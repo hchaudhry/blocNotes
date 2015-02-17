@@ -26,9 +26,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TABLE_NOTES = "notes";
 	private static final String KEY_ID_NOTES = "id";
 	private static final String KEY_TITLE_NOTES = "title";
+	private static final String KEY_TEXT_NOTES = "text";
 	private static final String KEY_ID_CATEGORY_NOTES = "categoryId";
 	private static final String[] NOTES_COLUMNS = { KEY_ID_NOTES,
-		KEY_TITLE_NOTES, KEY_ID_CATEGORY_NOTES };
+		KEY_TITLE_NOTES,KEY_TEXT_NOTES, KEY_ID_CATEGORY_NOTES };
 
 	public MyDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,7 +44,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 		String CREATE_NOTES_TABLE = "CREATE TABLE " + TABLE_NOTES + " ( "
 				+ KEY_ID_NOTES + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ KEY_TITLE_NOTES + " TEXT," + KEY_ID_CATEGORY_NOTES
+				+ KEY_TITLE_NOTES + " TEXT,"+ KEY_TEXT_NOTES + " TEXT," + KEY_ID_CATEGORY_NOTES
 				+ " INTEGER, " + " FOREIGN KEY ( " + KEY_ID_CATEGORY_NOTES
 				+ " ) REFERENCES " + TABLE_CATEGORIES + " ( " + KEY_ID_CATEGORY
 				+ " ))";
@@ -153,6 +154,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 				category = new Category();
 				category.setId(Integer.parseInt(cursor.getString(0)));
 				category.setName(cursor.getString(1));
+				
 
 				categories.add(category);
 			} while (cursor.moveToNext());
@@ -167,6 +169,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE_NOTES, note.getTitle());
+		values.put(KEY_TEXT_NOTES,note.getText());
 		values.put(KEY_ID_CATEGORY_NOTES, note.getCategoryId());
 
 		db.insert(TABLE_NOTES, null, values);
@@ -186,7 +189,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		Note note = new Note();
 		note.setId(Integer.parseInt(cursor.getString(0)));
 		note.setTitle(cursor.getString(1));
-
+		note.setText(cursor.getString(2));
 		return note;
 	}
 	public List<Note> getAllNotesForCategory(int categoryId) {
@@ -203,7 +206,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 				note = new Note();
 				note.setId(Integer.parseInt(cursor.getString(0)));
 				note.setTitle(cursor.getString(1));
-
+				note.setText(cursor.getString(2));
 				notes.add(note);
 			} while (cursor.moveToNext());
 		}
@@ -216,8 +219,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put("title", note.getTitle());
-
+		values.put(KEY_TITLE_NOTES, note.getTitle());
+		values.put(KEY_TEXT_NOTES, note.getText());
 		int i = db.update(TABLE_NOTES, values, KEY_ID_NOTES + " = ?",
 				new String[] { String.valueOf(note.getId()) });
 
@@ -252,6 +255,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 				note = new Note();
 				note.setId(Integer.parseInt(cursor.getString(0)));
 				note.setTitle(cursor.getString(1));
+				note.setText(cursor.getString(2));
 
 				notes.add(note);
 			} while (cursor.moveToNext());
