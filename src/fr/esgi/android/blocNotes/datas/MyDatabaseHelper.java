@@ -21,14 +21,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	private static final String KEY_ID_CATEGORY = "id";
 	private static final String KEY_NAME_CATEGORY = "name";
 	private static final String[] CATEGORIES_COLUMNS = { KEY_ID_CATEGORY,
-			KEY_NAME_CATEGORY };
+		KEY_NAME_CATEGORY };
 
 	private static final String TABLE_NOTES = "notes";
 	private static final String KEY_ID_NOTES = "id";
 	private static final String KEY_TITLE_NOTES = "title";
 	private static final String KEY_ID_CATEGORY_NOTES = "categoryId";
 	private static final String[] NOTES_COLUMNS = { KEY_ID_NOTES,
-			KEY_TITLE_NOTES, KEY_ID_CATEGORY_NOTES };
+		KEY_TITLE_NOTES, KEY_ID_CATEGORY_NOTES };
 
 	public MyDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -138,11 +138,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		db.close();
 
 	}
-	
+
 	public List<Category> getCategoriesForSearch(String categoryName) {
 		List<Category> categories = new LinkedList<Category>();
 
-		String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE title LIKE '%" + categoryName + "%'";
+		String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE "+KEY_NAME_CATEGORY+" LIKE '%" + categoryName + "%'";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
@@ -189,29 +189,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 		return note;
 	}
-
-	public List<Note> getAllNotes() {
-		List<Note> notes = new LinkedList<Note>();
-
-		String query = "SELECT  * FROM " + TABLE_NOTES + " ORDER BY name DESC";
-
-		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor cursor = db.rawQuery(query, null);
-
-		Note note = null;
-		if (cursor.moveToFirst()) {
-			do {
-				note = new Note();
-				note.setId(Integer.parseInt(cursor.getString(0)));
-				note.setTitle(cursor.getString(1));
-
-				notes.add(note);
-			} while (cursor.moveToNext());
-		}
-
-		return notes;
-	}
-
 	public List<Note> getAllNotesForCategory(int categoryId) {
 		List<Note> notes = new LinkedList<Note>();
 
@@ -251,15 +228,37 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public void deleteNote(Note note) {
-		Log.i("etape1","");
+
 		SQLiteDatabase db = this.getWritableDatabase();
-		Log.i("etape2","");
-		
 		db.delete(TABLE_NOTES, KEY_ID_NOTES + " = ?",
 				new String[] { String.valueOf(note.getId()) });
-		Log.i("etape3","");
+
 
 		db.close();
 	}
+
+	public List<Note> getNotesForSearch(String titleNote, int categoryId) {
+		List<Note> notes = new LinkedList<Note>();
+
+		String query = "SELECT  * FROM " + TABLE_NOTES + " where " +KEY_ID_CATEGORY_NOTES+" = "+categoryId+""
+				+ " AND "+KEY_TITLE_NOTES+" LIKE '%" + titleNote + "%' ORDER BY "+KEY_TITLE_NOTES;
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(query, null);
+
+		Note note = null;
+		if (cursor.moveToFirst()) {
+			do {
+				note = new Note();
+				note.setId(Integer.parseInt(cursor.getString(0)));
+				note.setTitle(cursor.getString(1));
+
+				notes.add(note);
+			} while (cursor.moveToNext());
+		}
+
+		return notes;
+	}
+
 
 }

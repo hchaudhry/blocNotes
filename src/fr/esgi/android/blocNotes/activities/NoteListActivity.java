@@ -1,9 +1,11 @@
 package fr.esgi.android.blocNotes.activities;
 
+import android.R.integer;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.EditText;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import fr.esgi.android.blocNotes.R;
+import fr.esgi.android.blocNotes.adapters.CategoryListAdapter;
 import fr.esgi.android.blocNotes.adapters.NoteListAdapter;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Category;
@@ -25,6 +28,8 @@ public class NoteListActivity extends ListActivity
 	private MyDatabaseHelper db;
 	private int categoryId;
 	private Button noteButton;
+	private EditText noteSearchInput;
+	private Button noteSearchButton; 
 	private Intent createNoteIntent;
 
 	@Override
@@ -45,7 +50,18 @@ public class NoteListActivity extends ListActivity
 		setListAdapter(noteAdapter);
 
 		noteButton = (Button) findViewById(R.id.add_new_note);
+		noteSearchButton = (Button) findViewById(R.id.noteBtnSearch);
+		noteSearchInput = (EditText) findViewById(R.id.searchNoteInput);
+		noteSearchButton.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				noteSearch(noteSearchInput.getText().toString());
+
+			}
+
+
+		});
 
 		registerForContextMenu(getListView());
 		//event on categoryButton
@@ -59,6 +75,14 @@ public class NoteListActivity extends ListActivity
 				startActivityForResult(createNoteIntent, 2);
 			}
 		});
+
+	}
+
+
+	private void noteSearch(String string) {
+
+		noteAdapter = new NoteListAdapter(NoteListActivity.this, db.getNotesForSearch(noteSearchInput.getText().toString(),categoryId));
+		setListAdapter(noteAdapter);
 
 	}
 
@@ -101,7 +125,7 @@ public class NoteListActivity extends ListActivity
 
 		switch (item.getItemId()) {
 		case R.id.modifyListNote:
-			Log.i("modifier","11111");
+
 			Intent modifyNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
 			modifyNoteIntent.putExtra("noteName", not.getTitle());
 			modifyNoteIntent.putExtra("noteId", not.getId());
@@ -110,12 +134,10 @@ public class NoteListActivity extends ListActivity
 
 			return true;
 		case R.id.deleteListNote:
-			Log.i("delete","");
 			deleteNote(not);
-			Log.i("e1","");
 			return true;
 		default:
-			Log.i("default","");
+
 			return super.onContextItemSelected(item);
 		}
 	}
@@ -123,13 +145,12 @@ public class NoteListActivity extends ListActivity
 	private void deleteNote(Note not) {
 
 		db.deleteNote(not);
-		Log.i("e1","");
+
 		noteAdapter = new NoteListAdapter(NoteListActivity.this,
-				db.getAllNotesForCategory(not.getCategoryId()));
-		Log.i("e1","");
+				db.getAllNotesForCategory(categoryId));
+
 		setListAdapter(noteAdapter);
 
-		Log.i("e1","");
 
 	}
 
