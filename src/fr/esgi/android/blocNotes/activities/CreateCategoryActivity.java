@@ -1,6 +1,7 @@
 package fr.esgi.android.blocNotes.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,14 +16,16 @@ public class CreateCategoryActivity extends Activity {
 
 	private EditText categoryName;
 	private Button categoryAdd;
-	private MyDatabaseHelper db;
 	private boolean modifyFlag = false;
 	int categoryIdFromList = 0;
+	private Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_category);
+		
+		context = this;
 
 		// set title of this activity
 		setTitle(R.string.newCategoryScreenName);
@@ -43,10 +46,10 @@ public class CreateCategoryActivity extends Activity {
 			categoryAdd.setText(R.string.modifyBtnTitle);
 		}
 		
-		db = new MyDatabaseHelper(this);
 
 		categoryAdd.setOnClickListener(new OnClickListener() {
 
+			@SuppressWarnings("static-access")
 			@Override
 			public void onClick(View v) {
 				Category toCreate = new Category();
@@ -55,11 +58,11 @@ public class CreateCategoryActivity extends Activity {
 				if (modifyFlag == true) {
 					toCreate.setId(categoryIdFromList);
 					// update
-					db.updateCategory(toCreate);
+					MyDatabaseHelper.getInstance(context).updateCategory(toCreate);
 				}
 				else {
 					// add task created
-					db.addTag(toCreate);
+					MyDatabaseHelper.getInstance(context).addTag(toCreate);
 				}
 				
 				Intent intent = new Intent();

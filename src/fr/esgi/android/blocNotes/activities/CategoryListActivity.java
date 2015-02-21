@@ -1,6 +1,7 @@
 package fr.esgi.android.blocNotes.activities;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -25,18 +26,19 @@ public class CategoryListActivity extends ListActivity {
 	private Button categoryButton;
 	private Button categorySearchButton;
 	private Intent createCategoryIntent;
-	private MyDatabaseHelper db;
 	private EditText categorySearchInput;
+	private Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_category_list);
+		
+		context = this;
 
 		// set title of this activity
 		setTitle(R.string.categoryScreenName);
-		
-		db = new MyDatabaseHelper(this);
+	
 		SearchAllCategory();
 
 		categoryButton = (Button) findViewById(R.id.add_new_caterory);
@@ -80,20 +82,19 @@ public class CategoryListActivity extends ListActivity {
 		});
 	}
 
+	@SuppressWarnings("static-access")
 	protected void SearchAllCategory() {
 		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this,
-				db.getAllCategories());
+				MyDatabaseHelper.getInstance(context).getAllCategories());
 		setListAdapter(categoryAdapter);
 		
 	}
 
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		Category category = (Category) l.getItemAtPosition(position);
-		// String tagNameValue = tag.getName();
 		int tagId = category.getId();
 
 		Intent i = new Intent(CategoryListActivity.this, NoteListActivity.class);
-		// i.putExtra("tagName", tagNameValue);
 		i.putExtra("categoryId", tagId);
 		startActivityForResult(i, 2);
 
@@ -133,29 +134,32 @@ public class CategoryListActivity extends ListActivity {
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (requestCode == 2) {
 			categoryAdapter = new CategoryListAdapter(
-					CategoryListActivity.this, db.getAllCategories());
+					CategoryListActivity.this, MyDatabaseHelper.getInstance(context).getAllCategories());
 			setListAdapter(categoryAdapter);
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	private void deleteCategory(int idCategory) {
 
-		db.deleteCategory(idCategory);
+		MyDatabaseHelper.getInstance(context).deleteCategory(idCategory);
 
 		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this,
-				db.getAllCategories());
+				MyDatabaseHelper.getInstance(context).getAllCategories());
 		setListAdapter(categoryAdapter);
 	}
 	
+	@SuppressWarnings("static-access")
 	private void categorySearch(String categoryName){
 		System.out.println(categoryName);
-		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this, db.getCategoriesForSearch(categoryName));
+		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this, MyDatabaseHelper.getInstance(context).getCategoriesForSearch(categoryName));
 		setListAdapter(categoryAdapter);
 	}
 }

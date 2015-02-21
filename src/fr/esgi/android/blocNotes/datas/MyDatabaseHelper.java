@@ -12,6 +12,10 @@ import fr.esgi.android.blocNotes.models.Category;
 import fr.esgi.android.blocNotes.models.Note;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
+	
+	
+	private static  MyDatabaseHelper instance;
+	private static Context ctx;
 
 	public static final int DATABASE_VERSION = 1;
 	public static final String DATABASE_NAME = "Notes.db";
@@ -30,8 +34,23 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	private static final String[] NOTES_COLUMNS = { KEY_ID_NOTES,
 		KEY_TITLE_NOTES,KEY_TEXT_NOTES, KEY_ID_CATEGORY_NOTES };
 
-	public MyDatabaseHelper(Context context) {
+	private MyDatabaseHelper(Context context) 
+	{
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		ctx = context;
+	}
+	
+	public static MyDatabaseHelper getInstance(Context context)
+	{	
+		if (instance == null)
+		{
+			synchronized (MyDatabaseHelper.class) 
+			{
+				instance = new MyDatabaseHelper(context);
+			}
+		}
+		
+		return instance;
 	}
 
 	@Override
@@ -61,9 +80,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 	// CRUD Category
 
-	public void addTag(Category category) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public static void addTag(Category category) {
+		//SQLiteDatabase db = this.getWritableDatabase();
 
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
+		
 		ContentValues values = new ContentValues();
 		values.put(KEY_NAME_CATEGORY, category.getName());
 
@@ -72,8 +93,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		db.close();
 	}
 
-	public Category getCategory(int id) {
-		SQLiteDatabase db = this.getReadableDatabase();
+	public static Category getCategory(int id) {
+		//SQLiteDatabase db = this.getReadableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_CATEGORIES, CATEGORIES_COLUMNS,
 				" id = ?", new String[] { String.valueOf(id) }, null, null,
@@ -89,12 +111,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		return category;
 	}
 
-	public List<Category> getAllCategories() {
+	public static List<Category> getAllCategories() {
 		List<Category> categories = new LinkedList<Category>();
 
 		String query = "SELECT  * FROM " + TABLE_CATEGORIES +" ORDER BY name ";
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
+		
 		Cursor cursor = db.rawQuery(query, null);
 
 		Category category = null;
@@ -111,8 +135,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		return categories;
 	}
 
-	public int updateCategory(Category category) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public static int updateCategory(Category category) {
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put("name", category.getName());
@@ -126,8 +151,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public void deleteCategory(int idCategory) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public static void deleteCategory(int idCategory) {
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
 
 		// Notes
 		db.delete(TABLE_NOTES, KEY_ID_CATEGORY_NOTES + " = ?",
@@ -139,12 +165,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public List<Category> getCategoriesForSearch(String categoryName) {
+	public static List<Category> getCategoriesForSearch(String categoryName) {
 		List<Category> categories = new LinkedList<Category>();
 
 		String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE "+KEY_NAME_CATEGORY+" LIKE '%" + categoryName + "%'";
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
+		
 		Cursor cursor = db.rawQuery(query, null);
 
 		Category category = null;
@@ -163,8 +191,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	}
 	// CRUD Notes
 
-	public void addNote(Note note) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public static void addNote(Note note) {
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE_NOTES, note.getTitle());
@@ -176,8 +205,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		db.close();
 	}
 
-	public Note getNote(int id) {
-		SQLiteDatabase db = this.getReadableDatabase();
+	public static Note getNote(int id) {
+		//SQLiteDatabase db = this.getReadableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_NOTES, NOTES_COLUMNS, " id = ?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
@@ -191,10 +221,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		note.setText(cursor.getString(2));
 		return note;
 	}
-	public List<Note> getAllNotesForCategory(int categoryId) {
+	public static List<Note> getAllNotesForCategory(int categoryId) {
 		List<Note> notes = new LinkedList<Note>();
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
 
 		Cursor cursor = db.query(TABLE_NOTES, NOTES_COLUMNS, " categoryId = ?",
 				new String[] { String.valueOf(categoryId) }, null, null, KEY_TITLE_NOTES);
@@ -213,9 +244,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		return notes;
 	}
 
-	public int updateNote(Note note) {
+	public static int updateNote(Note note) {
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE_NOTES, note.getTitle());
@@ -229,9 +261,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public void deleteNote(Note note) {
+	public static void deleteNote(Note note) {
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
+		
 		db.delete(TABLE_NOTES, KEY_ID_NOTES + " = ?",
 				new String[] { String.valueOf(note.getId()) });
 
@@ -239,13 +273,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		db.close();
 	}
 
-	public List<Note> getNotesForSearch(String titleNote, int categoryId) {
+	public static List<Note> getNotesForSearch(String titleNote, int categoryId) {
 		List<Note> notes = new LinkedList<Note>();
 
 		String query = "SELECT  * FROM " + TABLE_NOTES + " where " +KEY_ID_CATEGORY_NOTES+" = "+categoryId+""
 				+ " AND "+KEY_TITLE_NOTES+" LIKE '%" + titleNote + "%' ORDER BY "+KEY_TITLE_NOTES;
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
+		
 		Cursor cursor = db.rawQuery(query, null);
 
 		Note note = null;

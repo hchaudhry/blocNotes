@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.joda.time.DateTime;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,18 +23,19 @@ public class CreateNoteActivity extends Activity
 
 
 	private EditText noteTitleEditText ,noteTextEditText;
-
 	private Button noteAddBtn;
-	private MyDatabaseHelper db;
 	private boolean modifyFlag = false;
 	private int categoryId;
 	int noteId=0;
+	private Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_note);
+		
+		context = this;
 
 		//set title of this activity
 		setTitle(R.string.newNoteScreenName);
@@ -57,12 +59,13 @@ public class CreateNoteActivity extends Activity
 			noteTitleEditText.setText(noteName);
 			noteAddBtn.setText(R.string.modifyNoteBtnTitle);
 		}
-		db = new MyDatabaseHelper(this);
+		
 
 		categoryId = this.getIntent().getIntExtra("categoryId", 1);
 
 		noteAddBtn.setOnClickListener(new OnClickListener() {
 
+			@SuppressWarnings("static-access")
 			@Override
 			public void onClick(View v) {
 				Note toCreate = new Note();
@@ -74,13 +77,14 @@ public class CreateNoteActivity extends Activity
 				if(modifyFlag==true){
 					//update note
 					toCreate.setId(noteId);
-					db.updateNote(toCreate);
+					MyDatabaseHelper.getInstance(context).updateNote(toCreate);
 
 
 				}
 				else{ 
 					//Add note
-					db.addNote(toCreate);
+					MyDatabaseHelper.getInstance(context).addNote(toCreate);
+					
 					Calendar calendrier = Calendar.getInstance();
 					Log.i("Time","l'ann�e :"+Integer.toString(calendrier.get(Calendar.YEAR))+" et le mois "+Integer.toString(calendrier.get(Calendar.MONTH))+" et le jour "+Integer.toString(calendrier.get(Calendar.DAY_OF_MONTH)));
 

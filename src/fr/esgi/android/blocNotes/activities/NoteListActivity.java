@@ -1,6 +1,7 @@
 package fr.esgi.android.blocNotes.activities;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,12 +24,12 @@ import fr.esgi.android.blocNotes.models.Note;
 public class NoteListActivity extends ListActivity
 {
 	private NoteListAdapter noteAdapter;
-	private MyDatabaseHelper db;
 	private int categoryId;
 	private Button noteAddButton;
 	private EditText noteSearchInput;
 	private Button noteSearchButton; 
 	private Intent createNoteIntent;
+	private Context  context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -39,11 +40,11 @@ public class NoteListActivity extends ListActivity
 		//set title of this activity
 		setTitle(R.string.noteScreenName);
 
-		//get previous' tag's name
-		//String tagName = this.getIntent().getStringExtra("tagName");
+		//get previous' categoryId
+
 		categoryId = this.getIntent().getIntExtra("categoryId", 1);
 
-		db = new MyDatabaseHelper(this);
+
 		noteSearchForCategory();
 		
 		noteSearchButton = (Button) findViewById(R.id.noteBtnSearch);
@@ -89,14 +90,16 @@ public class NoteListActivity extends ListActivity
 
 	}
 
+	@SuppressWarnings("static-access")
 	private void noteSearchForCategory(){
-		noteAdapter = new NoteListAdapter(NoteListActivity.this,db.getAllNotesForCategory(categoryId));
+		noteAdapter = new NoteListAdapter(NoteListActivity.this,MyDatabaseHelper.getInstance(context).getAllNotesForCategory(categoryId));
 		setListAdapter(noteAdapter);
 	}
 
+	@SuppressWarnings("static-access")
 	private void noteSearch(String string) {
 
-		noteAdapter = new NoteListAdapter(NoteListActivity.this, db.getNotesForSearch(string,categoryId));
+		noteAdapter = new NoteListAdapter(NoteListActivity.this, MyDatabaseHelper.getInstance(context).getNotesForSearch(string,categoryId));
 		setListAdapter(noteAdapter);
 
 	}
@@ -113,12 +116,13 @@ public class NoteListActivity extends ListActivity
 		return super.onKeyDown(keyCode, event);
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (requestCode == 2) {
-			noteAdapter = new NoteListAdapter(NoteListActivity.this,db.getAllNotesForCategory(categoryId));
+			noteAdapter = new NoteListAdapter(NoteListActivity.this,MyDatabaseHelper.getInstance(context).getAllNotesForCategory(categoryId));
 			setListAdapter(noteAdapter);
 		}
 	}
@@ -158,12 +162,13 @@ public class NoteListActivity extends ListActivity
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	private void deleteNote(Note not) {
 
-		db.deleteNote(not);
+		MyDatabaseHelper.getInstance(context).deleteNote(not);
 
 		noteAdapter = new NoteListAdapter(NoteListActivity.this,
-				db.getAllNotesForCategory(categoryId));
+				MyDatabaseHelper.getInstance(context).getAllNotesForCategory(categoryId));
 
 		setListAdapter(noteAdapter);
 

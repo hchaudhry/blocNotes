@@ -2,6 +2,7 @@ package fr.esgi.android.blocNotes.adapters;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import fr.esgi.android.blocNotes.models.Category;
 
 public class CategoryListAdapter  extends BaseAdapter
 {
+	@SuppressWarnings("unused")
 	private Context context;
 	private List<Category> categories;
 	private LayoutInflater inflater;
@@ -49,6 +51,7 @@ public class CategoryListAdapter  extends BaseAdapter
 	
 	
 	
+	@SuppressLint("ViewHolder")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) 
 	{
@@ -59,8 +62,6 @@ public class CategoryListAdapter  extends BaseAdapter
 		TextView tagName = (TextView) convertView.findViewById(R.id.tagNameTextView);
 		tagName.setText(tag.getName()); 
 		
-//		TextView tagId = (TextView) convertView.findViewById(R.id.tagIdTextView);
-//		tagId.setText(String.valueOf(tag.getId()));
 		
 		return convertView;
 	}

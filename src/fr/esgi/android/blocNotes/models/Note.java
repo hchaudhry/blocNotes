@@ -1,10 +1,8 @@
 package fr.esgi.android.blocNotes.models;
 
-import java.io.Serializable;
-
 import org.joda.time.DateTime;
 
-public class Note implements Serializable
+public class Note
 {
 	private int id;
 	private String title;
