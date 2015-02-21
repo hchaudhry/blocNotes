@@ -62,13 +62,16 @@ public class CategoryListActivity extends ListActivity {
 			
 			@Override
 			public void onClick(View v) {
-				if(categorySearchButton.getText().equals(R.string.searchBtnTitle)){
+				String searchText = getResources().getString(R.string.searchBtnTitle);
+				String searchTextCancel = getResources().getString(R.string.cancelBtnTitle);
+				
+				if(categorySearchButton.getText().equals(searchText)){
 					categorySearch(categorySearchInput.getText().toString());
-					categorySearchButton.setText(R.string.cancelBtnTitle);
+					categorySearchButton.setText(searchTextCancel);
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
-				}else if (categorySearchButton.getText().equals(R.string.cancelBtnTitle)){
+				}else if (categorySearchButton.getText().equals(searchTextCancel)){
 					SearchAllCategory();
-					categorySearchButton.setText(R.string.searchBtnTitle);
+					categorySearchButton.setText(searchText);
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
 				}
 				
@@ -150,7 +153,7 @@ public class CategoryListActivity extends ListActivity {
 	}
 	
 	private void categorySearch(String categoryName){
-		
+		System.out.println(categoryName);
 		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this, db.getCategoriesForSearch(categoryName));
 		setListAdapter(categoryAdapter);
 	}

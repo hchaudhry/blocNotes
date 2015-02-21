@@ -53,13 +53,14 @@ public class NoteListActivity extends ListActivity
 
 			@Override
 			public void onClick(View v) {
-				if(noteSearchButton.getText().equals("Recherche")){
+
+				if(noteSearchButton.getText().equals(getResources().getString(R.string.searchBtnTitle))){
 					noteSearch(noteSearchInput.getText().toString());
-					noteSearchButton.setText("Annuler");
+					noteSearchButton.setText(getResources().getString(R.string.cancelBtnTitle));
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
-				}else if (noteSearchButton.getText().equals("Annuler")){
+				}else if (noteSearchButton.getText().equals(getResources().getString(R.string.cancelBtnTitle))){
 					noteSearchForCategory();
-					noteSearchButton.setText("Recherche");
+					noteSearchButton.setText(getResources().getString(R.string.searchBtnTitle));
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
 				}
 

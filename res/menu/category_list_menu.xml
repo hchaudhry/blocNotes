@@ -3,10 +3,10 @@
     
     <item 
          android:id="@+id/modifyCategory"
-         android:title="Modifier"/>
+         android:title="@+string/menuEdit"/>
 
     <item 
          android:id="@+id/deleteCategory"
-         android:title="Supprimer"/>
+         android:title="@+string/menuDelete"/>
     
 </menu>

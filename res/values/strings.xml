@@ -22,7 +22,8 @@
     <string name="inputNoteTextHint">Text de la note</string>
     <string name="modifyNoteBtnTitle">Modifier</string>
     
+    <!-- Menu -->
+    <string name="menuEdit">Modifier</string>
+    <string name="menuDelete">Supprimer</string>
     
-    
-
 </resources>
