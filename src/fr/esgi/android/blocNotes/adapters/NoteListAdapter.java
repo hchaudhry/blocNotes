@@ -1,6 +1,11 @@
 package fr.esgi.android.blocNotes.adapters;
 
 import java.util.List;
+import java.util.Locale;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -55,8 +60,22 @@ public class NoteListAdapter  extends BaseAdapter
 		convertView = inflater.inflate(R.layout.list_view_note,null);
 		
 		TextView noteTitle = (TextView) convertView.findViewById(R.id.noteTitleTextView);
-		noteTitle.setText(note.getTitle());
-
+		noteTitle.setText(context.getResources().getText(R.string.titlePrefixe) + " " + note.getTitle());
+		
+		TextView noteText = (TextView) convertView.findViewById(R.id.noteTextTextView);
+		noteText.setText(context.getResources().getText(R.string.textPrefixe) + " " + note.getText());
+		
+		TextView noteDate = (TextView) convertView.findViewById(R.id.noteDateTextView);
+		noteDate.setText(context.getResources().getText(R.string.dateTextPrefixe) + " " + dateTimeAsString(note.getDate()));
+		;
 		return convertView;
+	}
+	
+	
+	private String dateTimeAsString(DateTime dateTime)
+	{
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("dd MMMM yyyy");
+		formatter.withLocale(Locale.FRENCH);
+		return formatter.print(dateTime);	
 	}
 }

@@ -2,6 +2,8 @@ package fr.esgi.android.blocNotes.activities;
 
 import java.util.Calendar;
 
+import org.joda.time.DateTime;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +23,7 @@ public class CreateNoteActivity extends Activity
 	public static final int REQUEST_IMAGE_CAPTURE = 1;
 	public static final int REQUEST_AUDIO_CAPTURE = 2;
 
-	private EditText noteTitle ,noteText;
+	private EditText noteTitleEditText ,noteTextEditText;
 	//private Note toCreate;
 	private Button noteAddBtn;
 	private MyDatabaseHelper db;
@@ -40,11 +42,11 @@ public class CreateNoteActivity extends Activity
 
 		//toCreate = new Note();
 
-		noteTitle = (EditText) findViewById(R.id.noteTitleEditText);
-		noteTitle.setHint(R.string.inputNoteTitleHint);
+		noteTitleEditText = (EditText) findViewById(R.id.noteTitleEditText);
+		noteTitleEditText.setHint(R.string.inputNoteTitleHint);
 		
-		noteText = (EditText) findViewById(R.id.noteTextEditText);
-		noteText.setHint(R.string.inputNoteTextHint);
+		noteTextEditText = (EditText) findViewById(R.id.noteTextEditText);
+		noteTextEditText.setHint(R.string.inputNoteTextHint);
 		
 		noteAddBtn = (Button) findViewById(R.id.btnCreateNote);
 
@@ -53,8 +55,8 @@ public class CreateNoteActivity extends Activity
 			String noteTexte = this.getIntent().getStringExtra("noteText");
 			noteId=this.getIntent().getIntExtra("noteId", 1);
 			modifyFlag=this.getIntent().getBooleanExtra("modifyFlag", false);
-			noteText.setText(noteTexte);
-			noteTitle.setText(noteName);
+			noteTextEditText.setText(noteTexte);
+			noteTitleEditText.setText(noteName);
 			noteAddBtn.setText(R.string.modifyNoteBtnTitle);
 		}
 		db = new MyDatabaseHelper(this);
@@ -66,9 +68,10 @@ public class CreateNoteActivity extends Activity
 			@Override
 			public void onClick(View v) {
 				Note toCreate = new Note();
-				toCreate.setTitle(noteTitle.getText().toString());
+				toCreate.setTitle(noteTitleEditText.getText().toString());
 				toCreate.setCategoryId(categoryId);
-				toCreate.setText(noteText.getText().toString());
+				toCreate.setText(noteTextEditText.getText().toString());
+				toCreate.setDate(new DateTime());
 				// update or add note
 				if(modifyFlag==true){
 					//update note

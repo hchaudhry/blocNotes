@@ -2,10 +2,14 @@ package fr.esgi.android.blocNotes.models;
 
 import java.io.Serializable;
 
+import org.joda.time.DateTime;
+
 public class Note implements Serializable
 {
 	private int id;
-	private String title , text;
+	private String title;
+	private String text;
+	private DateTime date;
 	private int categoryId;
 
 
@@ -47,6 +51,16 @@ public class Note implements Serializable
 
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
+	}
+
+
+	public DateTime getDate() {
+		return date;
+	}
+
+
+	public void setDate(DateTime date) {
+		this.date = date;
 	}
 	
 	

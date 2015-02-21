@@ -11,5 +11,22 @@
         android:textAppearance="?android:attr/textAppearanceLarge" 
         android:textStyle="bold"
         android:textSize="25sp"/>
+    
+    <TextView
+        android:id="@+id/noteTextTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:textStyle="bold"
+        android:textSize="25sp"/>
+    
+    
+    <TextView
+        android:id="@+id/noteDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:textStyle="bold"
+        android:textSize="25sp"/>
         
 </LinearLayout>
