@@ -25,7 +25,7 @@ public class NoteListActivity extends ListActivity
 	private NoteListAdapter noteAdapter;
 	private MyDatabaseHelper db;
 	private int categoryId;
-	private Button noteButton;
+	private Button noteAddButton;
 	private EditText noteSearchInput;
 	private Button noteSearchButton; 
 	private Intent createNoteIntent;
@@ -37,7 +37,7 @@ public class NoteListActivity extends ListActivity
 		setContentView(R.layout.activity_note_list);
 
 		//set title of this activity
-		setTitle("Mes notes");
+		setTitle(R.string.noteScreenName);
 
 		//get previous' tag's name
 		//String tagName = this.getIntent().getStringExtra("tagName");
@@ -45,21 +45,27 @@ public class NoteListActivity extends ListActivity
 
 		db = new MyDatabaseHelper(this);
 		noteSearchForCategory();
-
-		noteButton = (Button) findViewById(R.id.add_new_note);
+		
 		noteSearchButton = (Button) findViewById(R.id.noteBtnSearch);
+		noteSearchButton.setText(R.string.noteSearchBtnTitle);
+		
 		noteSearchInput = (EditText) findViewById(R.id.searchNoteInput);
+		noteSearchInput.setHint(R.string.searchInputNoteHint);
+
+		noteAddButton = (Button) findViewById(R.id.add_new_note);
+		noteAddButton.setText(R.string.newNoteBtnTitle);
 		noteSearchButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if(noteSearchButton.getText().equals("Recherche")){
+
+				if(noteSearchButton.getText().equals(getResources().getString(R.string.searchBtnTitle))){
 					noteSearch(noteSearchInput.getText().toString());
-					noteSearchButton.setText("Annuler");
+					noteSearchButton.setText(getResources().getString(R.string.cancelBtnTitle));
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
-				}else if (noteSearchButton.getText().equals("Annuler")){
+				}else if (noteSearchButton.getText().equals(getResources().getString(R.string.cancelBtnTitle))){
 					noteSearchForCategory();
-					noteSearchButton.setText("Recherche");
+					noteSearchButton.setText(getResources().getString(R.string.searchBtnTitle));
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
 				}
 
@@ -70,7 +76,7 @@ public class NoteListActivity extends ListActivity
 
 		registerForContextMenu(getListView());
 		//event on categoryButton
-		noteButton.setOnClickListener(new OnClickListener() 
+		noteAddButton.setOnClickListener(new OnClickListener() 
 		{	
 
 			public void onClick(View v) 

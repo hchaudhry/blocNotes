@@ -9,6 +9,7 @@
     <string name="searchBtnTitle">Rechercher</string>
     <string name="cancelBtnTitle">Annuler</string>
     <string name="newCategorieBtnTitle">Nouvelle catégorie</string>
+    <string name="searchInputCategoryHint">Catégorie à rechercher</string>
     
     
     <!-- createCategoryActivity -->
@@ -17,18 +18,32 @@
     <string name="inputCategoryHint">Nom de la catégorie</string>
     <string name="createBtnTitle">Créer</string>
     
-    <!-- createNoteActivity -->
-    <string name="inputNoteTitleHint">Titre de la note</string>
-    <string name="inputNoteTextHint">Text de la note</string>
-    <string name="modifyNoteBtnTitle">Modifier</string>
     
     <!-- noteListActivity -->
+    <string name="noteScreenName">Mes Notes</string>
+    <string name="noteSearchBtnTitle">Rechercher</string>
+    <string name="noteCancelBtnTitle">Annuler</string>
+    <string name="newNoteBtnTitle">Nouvelle note</string>
+    <string name="searchInputNoteHint">Note à rechercher</string>
+    
+    
+    <!-- noteListAdapter -->
     <string name="dateTextPrefixe">Crée le :</string>
     <string name="titlePrefixe">#</string>
     <string name="textPrefixe">Contenu :</string>
     
     
-    
+    <!-- createNoteActivity -->
+    <string name="inputNoteTitleHint">Titre de la note</string>
+    <string name="inputNoteTextHint">Text de la note</string>
+    <string name="modifyNoteBtnTitle">Modifier</string>
+    <string name="noteCreateBtnTitle">Créer</string>
+    <string name="newNoteScreenName">Nouvelle Note</string>
     
 
+    <!-- Menu -->
+    <string name="menuEdit">Modifier</string>
+    <string name="menuDelete">Supprimer</string>
+
+    
 </resources>

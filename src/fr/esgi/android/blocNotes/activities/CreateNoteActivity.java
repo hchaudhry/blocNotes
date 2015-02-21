@@ -20,11 +20,9 @@ import fr.esgi.android.blocNotes.models.Note;
 public class CreateNoteActivity extends Activity 
 {
 
-	public static final int REQUEST_IMAGE_CAPTURE = 1;
-	public static final int REQUEST_AUDIO_CAPTURE = 2;
 
 	private EditText noteTitleEditText ,noteTextEditText;
-	//private Note toCreate;
+
 	private Button noteAddBtn;
 	private MyDatabaseHelper db;
 	private boolean modifyFlag = false;
@@ -38,9 +36,8 @@ public class CreateNoteActivity extends Activity
 		setContentView(R.layout.activity_create_note);
 
 		//set title of this activity
-		setTitle("Créer une note");
-
-		//toCreate = new Note();
+		setTitle(R.string.newNoteScreenName);
+		
 
 		noteTitleEditText = (EditText) findViewById(R.id.noteTitleEditText);
 		noteTitleEditText.setHint(R.string.inputNoteTitleHint);
@@ -49,6 +46,7 @@ public class CreateNoteActivity extends Activity
 		noteTextEditText.setHint(R.string.inputNoteTextHint);
 		
 		noteAddBtn = (Button) findViewById(R.id.btnCreateNote);
+		noteAddBtn.setText(R.string.noteCreateBtnTitle);
 
 		if (this.getIntent().getStringExtra("noteName") !=null){
 			String noteName = this.getIntent().getStringExtra("noteName");
