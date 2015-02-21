@@ -2,7 +2,27 @@
 <resources>
 
     <string name="app_name">Bloc notes</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    
+    
+    <!-- categoryListActivity -->
+    <string name="categoryScreenName">Mes Catégories</string>
+    <string name="searchBtnTitle">Rechercher</string>
+    <string name="cancelBtnTitle">Annuler</string>
+    <string name="newCategorieBtnTitle">Nouvelle catégorie</string>
+    
+    
+    <!-- createCategoryActivity -->
+    <string name="newCategoryScreenName">Nouvelle catégorie</string>
+    <string name="modifyBtnTitle">Modifier</string>
+    <string name="inputCategoryHint">Nom de la catégorie</string>
+    <string name="createBtnTitle">Créer</string>
+    
+    <!-- createNoteActivity -->
+    <string name="inputNoteTitleHint">Titre de la note</string>
+    <string name="inputNoteTextHint">Text de la note</string>
+    <string name="modifyNoteBtnTitle">Modifier</string>
+    
+    
+    
 
 </resources>

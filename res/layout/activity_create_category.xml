@@ -8,8 +8,7 @@
         style="@style/inputText"
         android:layout_width="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="55dp"
-        android:hint="Nom du tag" />
+        android:layout_marginTop="55dp"/>
 
     <Button
         android:id="@+id/categoryAdd"
@@ -18,7 +17,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tagNameEditText"
-        android:layout_marginTop="43dp"
-        android:text="Créer" />
+        android:layout_marginTop="43dp"/>
 
 </RelativeLayout>

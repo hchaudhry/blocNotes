@@ -25,10 +25,14 @@ public class CreateCategoryActivity extends Activity {
 		setContentView(R.layout.activity_create_category);
 
 		// set title of this activity
-		setTitle("Catégorie");
+		setTitle(R.string.newCategoryScreenName);
 
 		categoryName = (EditText) findViewById(R.id.tagNameEditText);
+		categoryName.setHint(R.string.inputCategoryHint);
+		
 		categoryAdd = (Button) findViewById(R.id.categoryAdd);
+		categoryAdd.setText(R.string.createBtnTitle);
+		
 		
 		if (this.getIntent().getStringExtra("categoryName") != null) {
 			String categoryNameFromList = this.getIntent().getStringExtra("categoryName");
@@ -36,7 +40,7 @@ public class CreateCategoryActivity extends Activity {
 			modifyFlag = this.getIntent().getBooleanExtra("modifyFlag", false);
 			categoryName.setText(categoryNameFromList);
 			
-			categoryAdd.setText("Modifier");
+			categoryAdd.setText(R.string.modifyBtnTitle);
 		}
 		
 		db = new MyDatabaseHelper(this);

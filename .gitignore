@@ -13,7 +13,7 @@ bin/
 gen/
  
 # Local configuration file (sdk path, etc)
-local.properties
+*.properties
 
 # Eclipse project files
 .classpath
@@ -27,6 +27,11 @@ proguard/
 # Mac OS X
 .DS_Store
 
+# Gradle
+*.gradle
+
+# Text file
+*.txt
 
 # LINK FOR CONFIG OF « .gitignore » —> http://www.javajirawat.com/2013/03/android-project-gitignore.html
 /bin/

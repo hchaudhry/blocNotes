@@ -3,7 +3,6 @@ package fr.esgi.android.blocNotes.activities;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;
@@ -35,12 +34,13 @@ public class CategoryListActivity extends ListActivity {
 		setContentView(R.layout.activity_category_list);
 
 		// set title of this activity
-		setTitle("Mes Catégories");
-
+		setTitle(R.string.categoryScreenName);
+		
 		db = new MyDatabaseHelper(this);
 		SearchAllCategory();
 
 		categoryButton = (Button) findViewById(R.id.add_new_caterory);
+		categoryButton.setText(R.string.newCategorieBtnTitle);
 
 		// event on categoryButton
 		categoryButton.setOnClickListener(new OnClickListener() {
@@ -55,19 +55,20 @@ public class CategoryListActivity extends ListActivity {
 		registerForContextMenu(getListView());
 		
 		categorySearchButton = (Button) findViewById(R.id.categoryBtnSearch);
+		categorySearchButton.setText(R.string.searchBtnTitle);
 		categorySearchInput = (EditText) findViewById(R.id.categorySearchInput);
 		
 		categorySearchButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				if(categorySearchButton.getText().equals("Recherche")){
+				if(categorySearchButton.getText().equals(R.string.searchBtnTitle)){
 					categorySearch(categorySearchInput.getText().toString());
-					categorySearchButton.setText("Annuler");
+					categorySearchButton.setText(R.string.cancelBtnTitle);
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
-				}else if (categorySearchButton.getText().equals("Annuler")){
+				}else if (categorySearchButton.getText().equals(R.string.cancelBtnTitle)){
 					SearchAllCategory();
-					categorySearchButton.setText("Recherche");
+					categorySearchButton.setText(R.string.searchBtnTitle);
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
 				}
 				
@@ -83,9 +84,9 @@ public class CategoryListActivity extends ListActivity {
 	}
 
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Category tag = (Category) l.getItemAtPosition(position);
+		Category category = (Category) l.getItemAtPosition(position);
 		// String tagNameValue = tag.getName();
-		int tagId = tag.getId();
+		int tagId = category.getId();
 
 		Intent i = new Intent(CategoryListActivity.this, NoteListActivity.class);
 		// i.putExtra("tagName", tagNameValue);

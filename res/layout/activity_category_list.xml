@@ -25,8 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/categorySearchInput"
-        android:layout_toRightOf="@+id/categorySearchInput"
-        android:text="Recherche" />
+        android:layout_toRightOf="@+id/categorySearchInput"/>
 
     <Button
         android:id="@+id/add_new_caterory"
@@ -34,7 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/categorySearchInput"
-        android:layout_marginTop="14dp"
-        android:text="Nouvelle catégorie" />
+        android:layout_marginTop="14dp"/>
 
 </RelativeLayout>
