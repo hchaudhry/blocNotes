@@ -22,6 +22,8 @@ import fr.esgi.android.blocNotes.models.Category;
 
 public class CategoryListActivity extends ListActivity {
 
+	private static final String SEARCH_INPUT_DATA = "searchInputData";
+	private static final String SEARCH_BTN_DATA = "searchBtnData";
 	private CategoryListAdapter categoryAdapter;
 	private Button categoryButton;
 	private Button categorySearchButton;
@@ -39,7 +41,6 @@ public class CategoryListActivity extends ListActivity {
 		// set title of this activity
 		setTitle(R.string.categoryScreenName);
 	
-		SearchAllCategory();
 
 		categoryButton = (Button) findViewById(R.id.add_new_caterory);
 		categoryButton.setText(R.string.newCategorieBtnTitle);
@@ -61,6 +62,26 @@ public class CategoryListActivity extends ListActivity {
 		categorySearchInput = (EditText) findViewById(R.id.categorySearchInput);
 		categorySearchInput.setHint(R.string.searchInputCategoryHint);
 		
+		if(savedInstanceState != null)
+		{
+			String searchInputSaved = savedInstanceState.getString(SEARCH_INPUT_DATA);
+			categorySearchInput.setText(searchInputSaved);
+			
+			String searchBtnTextSaved = savedInstanceState.getString(SEARCH_BTN_DATA);
+			categorySearchButton.setText(searchBtnTextSaved);
+			
+			if(categorySearchButton.getText().equals(getResources().getString(R.string.searchBtnTitle)))
+			{
+				SearchAllCategory();
+				Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
+			}
+			else if (categorySearchButton.getText().equals(getResources().getString(R.string.cancelBtnTitle)))
+			{
+				categorySearch(searchInputSaved);
+				Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
+			}
+		}
+		
 		categorySearchButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -68,11 +89,14 @@ public class CategoryListActivity extends ListActivity {
 				String searchText = getResources().getString(R.string.searchBtnTitle);
 				String searchTextCancel = getResources().getString(R.string.cancelBtnTitle);
 				
-				if(categorySearchButton.getText().equals(searchText)){
+				if(categorySearchButton.getText().equals(searchText))
+				{
 					categorySearch(categorySearchInput.getText().toString());
 					categorySearchButton.setText(searchTextCancel);
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
-				}else if (categorySearchButton.getText().equals(searchTextCancel)){
+				}
+				else if (categorySearchButton.getText().equals(searchTextCancel))
+				{
 					SearchAllCategory();
 					categorySearchButton.setText(searchText);
 					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+categoryAdapter.getCount(), Toast.LENGTH_SHORT).show();
@@ -80,7 +104,43 @@ public class CategoryListActivity extends ListActivity {
 				
 			}
 		});
+		
+		
+		
+		
+		
 	}
+	
+	@Override
+    public void onSaveInstanceState(Bundle savedInstanceState) 
+    {
+    	savedInstanceState.putString(SEARCH_INPUT_DATA, categorySearchInput.getText().toString());
+    	savedInstanceState.putString(SEARCH_BTN_DATA, categorySearchButton.getText().toString());
+    	
+    	super.onSaveInstanceState(savedInstanceState);
+    	
+    	
+    }
+	
+	/*@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) 
+	{
+
+	    super.onRestoreInstanceState(savedInstanceState);
+	   
+	    if(savedInstanceState != null)
+	    {
+	    	String searchInputSaved = savedInstanceState.getString(SEARCH_INPUT_DATA);
+	    	categorySearchInput.setText(searchInputSaved);
+		
+	    	String searchBtnSaved = savedInstanceState.getString(SEARCH_BTN_DATA);
+			categorySearchButton.setText(searchBtnSaved);
+			
+	    }
+	}*/
+	
+	
+	
 
 	@SuppressWarnings("static-access")
 	protected void SearchAllCategory() {

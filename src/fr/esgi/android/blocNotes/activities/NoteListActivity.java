@@ -23,6 +23,8 @@ import fr.esgi.android.blocNotes.models.Note;
 
 public class NoteListActivity extends ListActivity
 {
+	private static final String SEARCH_INPUT_DATA = "searchInputData";
+	private static final String SEARCH_BTN_DATA = "searchBtnData";
 	private NoteListAdapter noteAdapter;
 	private int categoryId;
 	private Button noteAddButton;
@@ -41,11 +43,9 @@ public class NoteListActivity extends ListActivity
 		setTitle(R.string.noteScreenName);
 
 		//get previous' categoryId
-
 		categoryId = this.getIntent().getIntExtra("categoryId", 1);
 
 
-		noteSearchForCategory();
 		
 		noteSearchButton = (Button) findViewById(R.id.noteBtnSearch);
 		noteSearchButton.setText(R.string.noteSearchBtnTitle);
@@ -55,6 +55,30 @@ public class NoteListActivity extends ListActivity
 
 		noteAddButton = (Button) findViewById(R.id.add_new_note);
 		noteAddButton.setText(R.string.newNoteBtnTitle);
+		
+		
+		if(savedInstanceState != null)
+		{
+			String searchInputSaved = savedInstanceState.getString(SEARCH_INPUT_DATA);
+			noteSearchInput.setText(searchInputSaved);
+			
+			String searchBtnTextSaved = savedInstanceState.getString(SEARCH_BTN_DATA);
+			noteSearchButton.setText(searchBtnTextSaved);
+			
+			if(noteSearchButton.getText().equals(getResources().getString(R.string.searchBtnTitle)))
+			{
+				noteSearchForCategory();
+				Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
+			}
+			else if (noteSearchButton.getText().equals(getResources().getString(R.string.cancelBtnTitle)))
+			{
+				noteSearch(searchInputSaved);
+				Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+		
+		
 		noteSearchButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -89,6 +113,17 @@ public class NoteListActivity extends ListActivity
 		});
 
 	}
+	
+	@Override
+    public void onSaveInstanceState(Bundle savedInstanceState) 
+    {
+    	savedInstanceState.putString(SEARCH_INPUT_DATA, noteSearchInput.getText().toString());
+    	savedInstanceState.putString(SEARCH_BTN_DATA, noteSearchButton.getText().toString());
+    	
+    	super.onSaveInstanceState(savedInstanceState);
+    	
+    	
+    }
 
 	@SuppressWarnings("static-access")
 	private void noteSearchForCategory(){

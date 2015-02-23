@@ -14,6 +14,7 @@ import fr.esgi.android.blocNotes.models.Category;
 
 public class CreateCategoryActivity extends Activity {
 
+	private static final String NAME_INPUT_DATA = "nameInputData";
 	private EditText categoryName;
 	private Button categoryAdd;
 	private boolean modifyFlag = false;
@@ -32,6 +33,12 @@ public class CreateCategoryActivity extends Activity {
 
 		categoryName = (EditText) findViewById(R.id.tagNameEditText);
 		categoryName.setHint(R.string.inputCategoryHint);
+		
+		if(savedInstanceState != null)
+		{
+			String nameInputSaved = savedInstanceState.getString(NAME_INPUT_DATA);
+			categoryName.setText(nameInputSaved);
+		}
 		
 		categoryAdd = (Button) findViewById(R.id.categoryAdd);
 		categoryAdd.setText(R.string.createBtnTitle);
@@ -71,5 +78,16 @@ public class CreateCategoryActivity extends Activity {
 			}
 		});
 	}
+	
+	
+	@Override
+    public void onSaveInstanceState(Bundle savedInstanceState) 
+    {
+    	savedInstanceState.putString(NAME_INPUT_DATA, categoryName.getText().toString());
+    	
+    	super.onSaveInstanceState(savedInstanceState);
+    	
+    	
+    }
 
 }

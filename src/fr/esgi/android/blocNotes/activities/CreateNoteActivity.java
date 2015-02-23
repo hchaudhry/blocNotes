@@ -22,6 +22,8 @@ public class CreateNoteActivity extends Activity
 {
 
 
+	private static final String TITLE_INPUT_DATA = "titleInputData";
+	private static final String TEXT_INPUT_DATA = "textInputData";
 	private EditText noteTitleEditText ,noteTextEditText;
 	private Button noteAddBtn;
 	private boolean modifyFlag = false;
@@ -46,6 +48,17 @@ public class CreateNoteActivity extends Activity
 		
 		noteTextEditText = (EditText) findViewById(R.id.noteTextEditText);
 		noteTextEditText.setHint(R.string.inputNoteTextHint);
+		
+		
+
+		if(savedInstanceState != null)
+		{
+			String titleInputSaved = savedInstanceState.getString(TITLE_INPUT_DATA);
+			noteTitleEditText.setText(titleInputSaved);
+			
+			String textInputSaved = savedInstanceState.getString(TITLE_INPUT_DATA);
+			noteTextEditText.setText(textInputSaved);
+		}
 		
 		noteAddBtn = (Button) findViewById(R.id.btnCreateNote);
 		noteAddBtn.setText(R.string.noteCreateBtnTitle);
@@ -97,6 +110,19 @@ public class CreateNoteActivity extends Activity
 		});
 
 	}
+	
+	
+	@Override
+    public void onSaveInstanceState(Bundle savedInstanceState) 
+    {
+    	savedInstanceState.putString(TITLE_INPUT_DATA, noteTitleEditText.getText().toString());
+    	savedInstanceState.putString(TEXT_INPUT_DATA, noteTextEditText.getText().toString());
+    	
+    	
+    	super.onSaveInstanceState(savedInstanceState);
+    	
+    	
+    }
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
