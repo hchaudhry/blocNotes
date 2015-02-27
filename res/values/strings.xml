@@ -28,7 +28,7 @@
     
     
     <!-- noteListAdapter -->
-    <string name="dateTextPrefixe">Crée le :</string>
+    <string name="dateTextPrefixe">Date :</string>
     <string name="titlePrefixe">#</string>
     <string name="textPrefixe">Contenu :</string>
     

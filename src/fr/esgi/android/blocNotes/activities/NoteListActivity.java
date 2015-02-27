@@ -111,6 +111,8 @@ public class NoteListActivity extends ListActivity
 				startActivityForResult(createNoteIntent, 2);
 			}
 		});
+		
+		noteSearchForCategory();
 
 	}
 	
@@ -126,7 +128,7 @@ public class NoteListActivity extends ListActivity
     }
 
 	@SuppressWarnings("static-access")
-	private void noteSearchForCategory(){
+	protected void noteSearchForCategory(){
 		noteAdapter = new NoteListAdapter(NoteListActivity.this,MyDatabaseHelper.getInstance(context).getAllNotesForCategory(categoryId));
 		setListAdapter(noteAdapter);
 	}
@@ -184,6 +186,7 @@ public class NoteListActivity extends ListActivity
 			modifyNoteIntent.putExtra("noteName", not.getTitle());
 			modifyNoteIntent.putExtra("noteText", not.getText());
 			modifyNoteIntent.putExtra("noteId", not.getId());
+			modifyNoteIntent.putExtra("noteDate", not.getDate());
 			modifyNoteIntent.putExtra("modifyFlag", true);
 			startActivityForResult(modifyNoteIntent, 2);
 
@@ -209,8 +212,4 @@ public class NoteListActivity extends ListActivity
 
 
 	}
-
-
-
-
 }

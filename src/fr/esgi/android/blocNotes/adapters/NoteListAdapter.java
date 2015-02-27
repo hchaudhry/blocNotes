@@ -8,6 +8,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,16 +67,17 @@ public class NoteListAdapter  extends BaseAdapter
 		noteText.setText(context.getResources().getText(R.string.textPrefixe) + " " + note.getText());
 		
 		TextView noteDate = (TextView) convertView.findViewById(R.id.noteDateTextView);
-		noteDate.setText(context.getResources().getText(R.string.dateTextPrefixe) + " " + dateTimeAsString(note.getDate()));
+		Log.i("NoteList", note.getDate());
+		noteDate.setText(context.getResources().getText(R.string.dateTextPrefixe) + " " + note.getDate());
 		;
 		return convertView;
 	}
 	
 	
-	private String dateTimeAsString(DateTime dateTime)
-	{
-		DateTimeFormatter formatter = DateTimeFormat.forPattern("dd MMMM yyyy");
-		formatter.withLocale(Locale.FRENCH);
-		return formatter.print(dateTime);	
-	}
+//	private String dateTimeAsString(DateTime dateTime)
+//	{
+//		DateTimeFormatter formatter = DateTimeFormat.forPattern("dd MMMM yyyy");
+//		formatter.withLocale(Locale.FRENCH);
+//		return formatter.print(dateTime);	
+//	}
 }

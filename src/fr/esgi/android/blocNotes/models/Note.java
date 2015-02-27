@@ -1,13 +1,13 @@
 package fr.esgi.android.blocNotes.models;
 
-import org.joda.time.DateTime;
 
 public class Note
 {
 	private int id;
 	private String title;
 	private String text;
-	private DateTime date;
+	private String date;
+
 	private int categoryId;
 
 
@@ -50,18 +50,13 @@ public class Note
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
 	}
-
-
-	public DateTime getDate() {
+	
+	public String getDate() {
 		return date;
 	}
 
 
-	public void setDate(DateTime date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
-	
-	
-	
-	
 }

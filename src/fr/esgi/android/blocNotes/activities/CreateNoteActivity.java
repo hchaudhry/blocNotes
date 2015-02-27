@@ -1,5 +1,6 @@
 package fr.esgi.android.blocNotes.activities;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.joda.time.DateTime;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Note;
@@ -30,6 +32,7 @@ public class CreateNoteActivity extends Activity
 	private int categoryId;
 	int noteId=0;
 	private Context context;
+	private TextView noteDateTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -49,7 +52,7 @@ public class CreateNoteActivity extends Activity
 		noteTextEditText = (EditText) findViewById(R.id.noteTextEditText);
 		noteTextEditText.setHint(R.string.inputNoteTextHint);
 		
-		
+		noteDateTextView = (TextView) findViewById(R.id.noteDateTextViewCreate);
 
 		if(savedInstanceState != null)
 		{
@@ -63,13 +66,21 @@ public class CreateNoteActivity extends Activity
 		noteAddBtn = (Button) findViewById(R.id.btnCreateNote);
 		noteAddBtn.setText(R.string.noteCreateBtnTitle);
 
-		if (this.getIntent().getStringExtra("noteName") !=null){
+		if (this.getIntent().getStringExtra("noteName") != null ){
+			
+			Log.i("CreateNote", this.getIntent().getStringExtra("noteDate"));
+			
 			String noteName = this.getIntent().getStringExtra("noteName");
 			String noteTexte = this.getIntent().getStringExtra("noteText");
-			noteId=this.getIntent().getIntExtra("noteId", 1);
-			modifyFlag=this.getIntent().getBooleanExtra("modifyFlag", false);
+			String noteDate = this.getIntent().getStringExtra("noteDate");
+			
+			noteId = this.getIntent().getIntExtra("noteId", 1);
+			modifyFlag = this.getIntent().getBooleanExtra("modifyFlag", false);
+			
 			noteTextEditText.setText(noteTexte);
 			noteTitleEditText.setText(noteName);
+			noteDateTextView.append(noteDate);
+			
 			noteAddBtn.setText(R.string.modifyNoteBtnTitle);
 		}
 		
@@ -85,7 +96,7 @@ public class CreateNoteActivity extends Activity
 				toCreate.setTitle(noteTitleEditText.getText().toString());
 				toCreate.setCategoryId(categoryId);
 				toCreate.setText(noteTextEditText.getText().toString());
-				toCreate.setDate(new DateTime());
+				
 				// update or add note
 				if(modifyFlag==true){
 					//update note

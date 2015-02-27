@@ -1,7 +1,13 @@
 package fr.esgi.android.blocNotes.datas;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.joda.time.DateTime;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,9 +36,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	private static final String KEY_ID_NOTES = "id";
 	private static final String KEY_TITLE_NOTES = "title";
 	private static final String KEY_TEXT_NOTES = "text";
+	private static final String KEY_DATE_NOTES = "date";
 	private static final String KEY_ID_CATEGORY_NOTES = "categoryId";
 	private static final String[] NOTES_COLUMNS = { KEY_ID_NOTES,
-		KEY_TITLE_NOTES,KEY_TEXT_NOTES, KEY_ID_CATEGORY_NOTES };
+		KEY_TITLE_NOTES,KEY_TEXT_NOTES, KEY_DATE_NOTES, KEY_ID_CATEGORY_NOTES };
 
 	private MyDatabaseHelper(Context context) 
 	{
@@ -62,7 +69,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 		String CREATE_NOTES_TABLE = "CREATE TABLE " + TABLE_NOTES + " ( "
 				+ KEY_ID_NOTES + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ KEY_TITLE_NOTES + " TEXT,"+ KEY_TEXT_NOTES + " TEXT," + KEY_ID_CATEGORY_NOTES
+				+ KEY_TITLE_NOTES + " TEXT,"+ KEY_TEXT_NOTES + " TEXT," + KEY_DATE_NOTES + " TEXT," + KEY_ID_CATEGORY_NOTES
 				+ " INTEGER, " + " FOREIGN KEY ( " + KEY_ID_CATEGORY_NOTES
 				+ " ) REFERENCES " + TABLE_CATEGORIES + " ( " + KEY_ID_CATEGORY
 				+ " ))";
@@ -198,6 +205,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE_NOTES, note.getTitle());
 		values.put(KEY_TEXT_NOTES,note.getText());
+
+		Calendar rightNow = Calendar.getInstance();
+		SimpleDateFormat day = new java.text.SimpleDateFormat("dd");
+		SimpleDateFormat month = new java.text.SimpleDateFormat("MM");
+		SimpleDateFormat year = new java.text.SimpleDateFormat("yyyy");
+		
+		values.put(KEY_DATE_NOTES, "" + day.format(rightNow.getTime()) + "/" + month.format(rightNow.getTime()) + "/" + year.format(rightNow.getTime()) +"" );
+		
 		values.put(KEY_ID_CATEGORY_NOTES, note.getCategoryId());
 
 		db.insert(TABLE_NOTES, null, values);
@@ -219,6 +234,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		note.setId(Integer.parseInt(cursor.getString(0)));
 		note.setTitle(cursor.getString(1));
 		note.setText(cursor.getString(2));
+
+		Calendar rightNow = Calendar.getInstance();
+		SimpleDateFormat day = new java.text.SimpleDateFormat("dd");
+		SimpleDateFormat month = new java.text.SimpleDateFormat("MM");
+		SimpleDateFormat year = new java.text.SimpleDateFormat("yyyy");
+
+		note.setDate(day.format(rightNow.getTime()) + "/" + month.format(rightNow.getTime()) + "/" + year.format(rightNow.getTime()));
+		
 		return note;
 	}
 	public static List<Note> getAllNotesForCategory(int categoryId) {
@@ -237,6 +260,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 				note.setId(Integer.parseInt(cursor.getString(0)));
 				note.setTitle(cursor.getString(1));
 				note.setText(cursor.getString(2));
+				note.setDate(cursor.getString(3));
 				notes.add(note);
 			} while (cursor.moveToNext());
 		}
@@ -252,6 +276,15 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE_NOTES, note.getTitle());
 		values.put(KEY_TEXT_NOTES, note.getText());
+		
+		Calendar rightNow = Calendar.getInstance();
+		SimpleDateFormat day = new java.text.SimpleDateFormat("dd");
+		SimpleDateFormat month = new java.text.SimpleDateFormat("MM");
+		SimpleDateFormat year = new java.text.SimpleDateFormat("yyyy");
+		
+		values.put(KEY_DATE_NOTES, "" + day.format(rightNow.getTime()) + "/" + month.format(rightNow.getTime()) + "/" + year.format(rightNow.getTime()) +"" );
+		
+		
 		int i = db.update(TABLE_NOTES, values, KEY_ID_NOTES + " = ?",
 				new String[] { String.valueOf(note.getId()) });
 

@@ -106,7 +106,7 @@ public class CategoryListActivity extends ListActivity {
 		});
 		
 		
-		
+		SearchAllCategory();
 		
 		
 	}
