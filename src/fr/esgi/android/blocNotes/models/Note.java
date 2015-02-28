@@ -7,6 +7,7 @@ public class Note
 	private String title;
 	private String text;
 	private String date;
+	private String rating;
 
 	private int categoryId;
 
@@ -58,5 +59,14 @@ public class Note
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+	
+	public String getRating() {
+		return rating;
+	}
+
+
+	public void setRating(String rating) {
+		this.rating = rating;
 	}
 }

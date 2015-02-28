@@ -1,20 +1,16 @@
 package fr.esgi.android.blocNotes.activities;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-import org.joda.time.DateTime;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
@@ -33,6 +29,8 @@ public class CreateNoteActivity extends Activity
 	int noteId=0;
 	private Context context;
 	private TextView noteDateTextView;
+	private RatingBar noteImportance;
+	private float noteImportanceValue;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -45,6 +43,7 @@ public class CreateNoteActivity extends Activity
 		//set title of this activity
 		setTitle(R.string.newNoteScreenName);
 		
+		addListenerOnRatingBar();
 
 		noteTitleEditText = (EditText) findViewById(R.id.noteTitleEditText);
 		noteTitleEditText.setHint(R.string.inputNoteTitleHint);
@@ -68,18 +67,20 @@ public class CreateNoteActivity extends Activity
 
 		if (this.getIntent().getStringExtra("noteName") != null ){
 			
-			Log.i("CreateNote", this.getIntent().getStringExtra("noteDate"));
-			
 			String noteName = this.getIntent().getStringExtra("noteName");
 			String noteTexte = this.getIntent().getStringExtra("noteText");
 			String noteDate = this.getIntent().getStringExtra("noteDate");
 			
 			noteId = this.getIntent().getIntExtra("noteId", 1);
+			
+			Note noteRate = MyDatabaseHelper.getInstance(context).getNote(noteId);
+			
 			modifyFlag = this.getIntent().getBooleanExtra("modifyFlag", false);
 			
 			noteTextEditText.setText(noteTexte);
 			noteTitleEditText.setText(noteName);
 			noteDateTextView.append(noteDate);
+			noteImportance.setRating(Float.parseFloat(noteRate.getRating()));
 			
 			noteAddBtn.setText(R.string.modifyNoteBtnTitle);
 		}
@@ -92,10 +93,12 @@ public class CreateNoteActivity extends Activity
 			@SuppressWarnings("static-access")
 			@Override
 			public void onClick(View v) {
+				
 				Note toCreate = new Note();
 				toCreate.setTitle(noteTitleEditText.getText().toString());
 				toCreate.setCategoryId(categoryId);
 				toCreate.setText(noteTextEditText.getText().toString());
+				toCreate.setRating(String.valueOf(noteImportanceValue));
 				
 				// update or add note
 				if(modifyFlag==true){
@@ -109,8 +112,8 @@ public class CreateNoteActivity extends Activity
 					//Add note
 					MyDatabaseHelper.getInstance(context).addNote(toCreate);
 					
-					Calendar calendrier = Calendar.getInstance();
-					Log.i("Time","l'ann�e :"+Integer.toString(calendrier.get(Calendar.YEAR))+" et le mois "+Integer.toString(calendrier.get(Calendar.MONTH))+" et le jour "+Integer.toString(calendrier.get(Calendar.DAY_OF_MONTH)));
+//					Calendar calendrier = Calendar.getInstance();
+//					Log.i("Time","l'ann�e :"+Integer.toString(calendrier.get(Calendar.YEAR))+" et le mois "+Integer.toString(calendrier.get(Calendar.MONTH))+" et le jour "+Integer.toString(calendrier.get(Calendar.DAY_OF_MONTH)));
 
 				}
 
@@ -120,6 +123,19 @@ public class CreateNoteActivity extends Activity
 			}
 		});
 
+	}
+	
+	public void addListenerOnRatingBar() {
+
+		noteImportance = (RatingBar) findViewById(R.id.noteRating);
+	
+		noteImportance.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+	
+			public void onRatingChanged(RatingBar ratingBar, float rating,	boolean fromUser) {
+	
+				noteImportanceValue = rating;
+			}
+		});
 	}
 	
 	
