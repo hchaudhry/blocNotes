@@ -12,16 +12,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.adapters.NoteListAdapter;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Note;
 
-public class NoteListActivity extends ListActivity
+public class NoteListActivity extends ListActivity implements OnItemSelectedListener
 {
 	private static final String SEARCH_INPUT_DATA = "searchInputData";
 	private static final String SEARCH_BTN_DATA = "searchBtnData";
@@ -32,6 +35,7 @@ public class NoteListActivity extends ListActivity
 	private Button noteSearchButton; 
 	private Intent createNoteIntent;
 	private Context  context;
+	private Spinner triSpinner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -114,6 +118,9 @@ public class NoteListActivity extends ListActivity
 		
 		noteSearchForCategory();
 
+		
+		triSpinner = (Spinner) findViewById(R.id.triSpinnerNote);
+		triSpinner.setOnItemSelectedListener(this);
 	}
 	
 	@Override
@@ -211,5 +218,46 @@ public class NoteListActivity extends ListActivity
 		setListAdapter(noteAdapter);
 
 
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position,
+			long id) {
+		
+		String item = parent.getItemAtPosition(position).toString();
+		
+		String date = "Date";
+		String titre = "Titre";
+		String rating = "Importance";
+		
+		if (item.equals(date)) {
+			noteAdapter = new NoteListAdapter(NoteListActivity.this,
+					MyDatabaseHelper.getInstance(context).getNotesOrderByDate(categoryId));
+
+			setListAdapter(noteAdapter);
+			
+		}
+		
+		if (item.equals(titre)) {
+			noteAdapter = new NoteListAdapter(NoteListActivity.this,
+					MyDatabaseHelper.getInstance(context).getAllNotesForCategory(categoryId));
+
+			setListAdapter(noteAdapter);
+			
+		}
+		
+		if (item.equals(rating)) {
+			noteAdapter = new NoteListAdapter(NoteListActivity.this,
+					MyDatabaseHelper.getInstance(context).getNotesOrderByRating(categoryId));
+
+			setListAdapter(noteAdapter);
+			
+		}
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		// TODO Auto-generated method stub
+		
 	}
 }

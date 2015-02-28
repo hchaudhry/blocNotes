@@ -67,7 +67,6 @@ public class NoteListAdapter  extends BaseAdapter
 		noteText.setText(context.getResources().getText(R.string.textPrefixe) + " " + note.getText());
 		
 		TextView noteDate = (TextView) convertView.findViewById(R.id.noteDateTextView);
-		Log.i("NoteList", note.getDate());
 		noteDate.setText(context.getResources().getText(R.string.dateTextPrefixe) + " " + note.getDate());
 		;
 		return convertView;

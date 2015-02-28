@@ -44,6 +44,14 @@
     <!-- Menu -->
     <string name="menuEdit">Modifier</string>
     <string name="menuDelete">Supprimer</string>
-
+    
+    <!-- Note Order Spinners -->
+    <string-array name="note_snipper">
+        <item>Titre</item>
+        <item>Date</item>
+        <item>Importance</item>
+    </string-array>
+    
+    <string name="spinnerTitle">Trier :</string>
     
 </resources>

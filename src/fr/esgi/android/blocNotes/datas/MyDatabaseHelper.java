@@ -10,7 +10,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import fr.esgi.android.blocNotes.models.Category;
 import fr.esgi.android.blocNotes.models.Note;
 
@@ -325,6 +324,62 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 				note.setId(Integer.parseInt(cursor.getString(0)));
 				note.setTitle(cursor.getString(1));
 				note.setText(cursor.getString(2));
+
+				notes.add(note);
+			} while (cursor.moveToNext());
+		}
+
+		return notes;
+	}
+	
+	public static List<Note> getNotesOrderByDate(int categoryId) {
+		List<Note> notes = new LinkedList<Note>();
+
+		String query = "SELECT  * FROM " + TABLE_NOTES + " where " +KEY_ID_CATEGORY_NOTES+" = "+categoryId+""
+				+ " ORDER BY " + KEY_DATE_NOTES;
+
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
+		
+		Cursor cursor = db.rawQuery(query, null);
+
+		Note note = null;
+		if (cursor.moveToFirst()) {
+			do {
+				note = new Note();
+				note.setId(Integer.parseInt(cursor.getString(0)));
+				note.setTitle(cursor.getString(1));
+				note.setText(cursor.getString(2));
+				note.setDate(cursor.getString(3));
+				note.setRating(cursor.getString(4));
+
+				notes.add(note);
+			} while (cursor.moveToNext());
+		}
+
+		return notes;
+	}
+	
+	public static List<Note> getNotesOrderByRating(int categoryId) {
+		List<Note> notes = new LinkedList<Note>();
+
+		String query = "SELECT  * FROM " + TABLE_NOTES + " where " +KEY_ID_CATEGORY_NOTES+" = "+categoryId+""
+				+ " ORDER BY " + KEY_RATING_NOTES + " DESC";
+
+		//SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getInstance(ctx).getWritableDatabase();
+		
+		Cursor cursor = db.rawQuery(query, null);
+
+		Note note = null;
+		if (cursor.moveToFirst()) {
+			do {
+				note = new Note();
+				note.setId(Integer.parseInt(cursor.getString(0)));
+				note.setTitle(cursor.getString(1));
+				note.setText(cursor.getString(2));
+				note.setDate(cursor.getString(3));
+				note.setRating(cursor.getString(4));
 
 				notes.add(note);
 			} while (cursor.moveToNext());
