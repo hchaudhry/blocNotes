@@ -7,10 +7,11 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="259dp"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/textView1"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/add_new_note"
         android:layout_weight="1.09" >
+
     </ListView>
 
     <EditText
@@ -23,15 +24,6 @@
         android:layout_toLeftOf="@+id/noteBtnSearch" />
 
     <Button
-        android:id="@+id/add_new_note"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/searchNoteInput"
-        android:layout_marginTop="14dp"
-        android:text="@+string/newNoteBtnTitle" />
-
-    <Button
         android:id="@+id/noteBtnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,5 +31,29 @@
         android:layout_alignBottom="@+id/searchNoteInput"
         android:layout_alignParentRight="true"
         android:text="@+string/searchBtnTitle" />
+
+    <Button
+        android:id="@+id/add_new_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/noteBtnSearch"
+        android:text="@+string/newNoteBtnTitle" />
+    
+    <Spinner
+        android:id="@+id/triSpinnerNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:entries="@array/note_snipper" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/triSpinnerNote"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="@+string/spinnerTitle" />
 
 </RelativeLayout>
