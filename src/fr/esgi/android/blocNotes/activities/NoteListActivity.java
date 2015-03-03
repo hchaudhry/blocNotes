@@ -17,11 +17,13 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.adapters.NoteListAdapter;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
+import fr.esgi.android.blocNotes.models.Category;
 import fr.esgi.android.blocNotes.models.Note;
 
 public class NoteListActivity extends ListActivity implements OnItemSelectedListener
@@ -123,6 +125,20 @@ public class NoteListActivity extends ListActivity implements OnItemSelectedList
 		triSpinner.setOnItemSelectedListener(this);
 	}
 	
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		
+		Note not = (Note) l.getItemAtPosition(position);
+
+		Intent modifyNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
+		modifyNoteIntent.putExtra("noteName", not.getTitle());
+		modifyNoteIntent.putExtra("noteText", not.getText());
+		modifyNoteIntent.putExtra("noteId", not.getId());
+		modifyNoteIntent.putExtra("noteDate", not.getDate());
+		modifyNoteIntent.putExtra("modifyFlag", true);
+		startActivityForResult(modifyNoteIntent, 2);
+
+	}
+	
 	@Override
     public void onSaveInstanceState(Bundle savedInstanceState) 
     {
@@ -187,17 +203,17 @@ public class NoteListActivity extends ListActivity implements OnItemSelectedList
 		Note not = (Note) getListAdapter().getItem(info.position);
 
 		switch (item.getItemId()) {
-		case R.id.modifyListNote:
-
-			Intent modifyNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
-			modifyNoteIntent.putExtra("noteName", not.getTitle());
-			modifyNoteIntent.putExtra("noteText", not.getText());
-			modifyNoteIntent.putExtra("noteId", not.getId());
-			modifyNoteIntent.putExtra("noteDate", not.getDate());
-			modifyNoteIntent.putExtra("modifyFlag", true);
-			startActivityForResult(modifyNoteIntent, 2);
-
-			return true;
+//		case R.id.modifyListNote:
+//
+//			Intent modifyNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
+//			modifyNoteIntent.putExtra("noteName", not.getTitle());
+//			modifyNoteIntent.putExtra("noteText", not.getText());
+//			modifyNoteIntent.putExtra("noteId", not.getId());
+//			modifyNoteIntent.putExtra("noteDate", not.getDate());
+//			modifyNoteIntent.putExtra("modifyFlag", true);
+//			startActivityForResult(modifyNoteIntent, 2);
+//
+//			return true;
 		case R.id.deleteListNote:
 			deleteNote(not);
 			return true;

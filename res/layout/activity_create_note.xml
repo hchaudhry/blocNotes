@@ -15,7 +15,7 @@
             style="@style/inputText"
             android:layout_width="match_parent"
             android:layout_margin="@dimen/activity_vertical_margin"
-            android:layout_weight="1"
+            android:layout_weight="0.62"
             android:hint="@+string/inputNoteTitleHint"
             android:maxLength="@integer/Length" />
 
@@ -35,7 +35,8 @@
         <TextView
             android:id="@+id/noteDateTextViewCreate"
             android:layout_width="244dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+        	android:textSize="20sp"
             android:layout_weight="1.88" />
 
         <RatingBar

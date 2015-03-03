@@ -324,6 +324,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 				note.setId(Integer.parseInt(cursor.getString(0)));
 				note.setTitle(cursor.getString(1));
 				note.setText(cursor.getString(2));
+				note.setDate(cursor.getString(3));
 
 				notes.add(note);
 			} while (cursor.moveToNext());
