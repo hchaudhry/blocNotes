@@ -10,13 +10,4 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="55dp"/>
 
-    <Button
-        android:id="@+id/categoryAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tagNameEditText"
-        android:layout_marginTop="43dp"/>
-
 </RelativeLayout>

@@ -1,43 +1,49 @@
 package fr.esgi.android.blocNotes.activities;
 
-import android.app.ListActivity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 import fr.esgi.android.blocNotes.R;
+import fr.esgi.android.blocNotes.activities.CategoryListActivity.ActionBarCallBack;
 import fr.esgi.android.blocNotes.adapters.NoteListAdapter;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Category;
 import fr.esgi.android.blocNotes.models.Note;
 
-public class NoteListActivity extends ListActivity implements OnItemSelectedListener
+public class NoteListActivity extends ActionBarActivity implements OnItemSelectedListener
 {
-	private static final String SEARCH_INPUT_DATA = "searchInputData";
-	private static final String SEARCH_BTN_DATA = "searchBtnData";
+//	private static final String SEARCH_INPUT_DATA = "searchInputData";
+//	private static final String SEARCH_BTN_DATA = "searchBtnData";
 	private NoteListAdapter noteAdapter;
 	private int categoryId;
-	private Button noteAddButton;
-	private EditText noteSearchInput;
-	private Button noteSearchButton; 
+//	private Button noteAddButton;
+//	private EditText noteSearchInput;
+//	private Button noteSearchButton; 
 	private Intent createNoteIntent;
 	private Context  context;
 	private Spinner triSpinner;
+	
+	private ListView lv;
+	private Note note;
+	private ActionMode mActionMode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -51,116 +57,106 @@ public class NoteListActivity extends ListActivity implements OnItemSelectedList
 		//get previous' categoryId
 		categoryId = this.getIntent().getIntExtra("categoryId", 1);
 
-
+		lv = (ListView) findViewById(R.id.note_list);
 		
-		noteSearchButton = (Button) findViewById(R.id.noteBtnSearch);
-		noteSearchButton.setText(R.string.noteSearchBtnTitle);
-		
-		noteSearchInput = (EditText) findViewById(R.id.searchNoteInput);
-		noteSearchInput.setHint(R.string.searchInputNoteHint);
-
-		noteAddButton = (Button) findViewById(R.id.add_new_note);
-		noteAddButton.setText(R.string.newNoteBtnTitle);
-		
-		
-		if(savedInstanceState != null)
-		{
-			String searchInputSaved = savedInstanceState.getString(SEARCH_INPUT_DATA);
-			noteSearchInput.setText(searchInputSaved);
-			
-			String searchBtnTextSaved = savedInstanceState.getString(SEARCH_BTN_DATA);
-			noteSearchButton.setText(searchBtnTextSaved);
-			
-			if(noteSearchButton.getText().equals(getResources().getString(R.string.searchBtnTitle)))
-			{
-				noteSearchForCategory();
-				Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
-			}
-			else if (noteSearchButton.getText().equals(getResources().getString(R.string.cancelBtnTitle)))
-			{
-				noteSearch(searchInputSaved);
-				Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
-			}
-		}
-		
-		
-		
-		noteSearchButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				if(noteSearchButton.getText().equals(getResources().getString(R.string.searchBtnTitle))){
-					noteSearch(noteSearchInput.getText().toString());
-					noteSearchButton.setText(getResources().getString(R.string.cancelBtnTitle));
-					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
-				}else if (noteSearchButton.getText().equals(getResources().getString(R.string.cancelBtnTitle))){
-					noteSearchForCategory();
-					noteSearchButton.setText(getResources().getString(R.string.searchBtnTitle));
-					Toast.makeText(getApplicationContext(), "Les nombres d'enregistrement : "+noteAdapter.getCount(), Toast.LENGTH_SHORT).show();
-				}
-
-			}
-
-
-		});
-
-		registerForContextMenu(getListView());
-		//event on categoryButton
-		noteAddButton.setOnClickListener(new OnClickListener() 
-		{	
-
-			public void onClick(View v) 
-			{
-				createNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
-				createNoteIntent.putExtra("categoryId", categoryId);
-				startActivityForResult(createNoteIntent, 2);
-			}
-		});
+		registerForContextMenu(lv);
 		
 		noteSearchForCategory();
 
-		
 		triSpinner = (Spinner) findViewById(R.id.triSpinnerNote);
 		triSpinner.setOnItemSelectedListener(this);
-	}
-	
-	protected void onListItemClick(ListView l, View v, int position, long id) {
 		
-		Note not = (Note) l.getItemAtPosition(position);
+		lv.setOnItemClickListener(new OnItemClickListener() {
 
-		Intent modifyNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
-		modifyNoteIntent.putExtra("noteName", not.getTitle());
-		modifyNoteIntent.putExtra("noteText", not.getText());
-		modifyNoteIntent.putExtra("noteId", not.getId());
-		modifyNoteIntent.putExtra("noteDate", not.getDate());
-		modifyNoteIntent.putExtra("modifyFlag", true);
-		startActivityForResult(modifyNoteIntent, 2);
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				
+				Note not = (Note) parent.getItemAtPosition(position);
 
+				Intent modifyNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
+				modifyNoteIntent.putExtra("noteName", not.getTitle());
+				modifyNoteIntent.putExtra("noteText", not.getText());
+				modifyNoteIntent.putExtra("noteId", not.getId());
+				modifyNoteIntent.putExtra("noteDate", not.getDate());
+				modifyNoteIntent.putExtra("modifyFlag", true);
+				startActivityForResult(modifyNoteIntent, 2);
+			}
+		});
+		
+		lv.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				note = (Note) parent.getItemAtPosition(position);
+
+				mActionMode = NoteListActivity.this
+						.startSupportActionMode(new ActionBarCallBack());
+				return true;
+			}
+		});
 	}
 	
 	@Override
-    public void onSaveInstanceState(Bundle savedInstanceState) 
-    {
-    	savedInstanceState.putString(SEARCH_INPUT_DATA, noteSearchInput.getText().toString());
-    	savedInstanceState.putString(SEARCH_BTN_DATA, noteSearchButton.getText().toString());
-    	
-    	super.onSaveInstanceState(savedInstanceState);
-    	
-    	
-    }
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.note_list_menu, menu);
+
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) menu.findItem(R.id.action_search_note)
+				.getActionView();
+		searchView.setSearchableInfo(searchManager
+				.getSearchableInfo(getComponentName()));
+		searchView.setSubmitButtonEnabled(true);
+	    
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+			
+			@Override
+			public boolean onQueryTextSubmit(String arg0) {
+				return false;
+			}
+			
+			@Override
+			public boolean onQueryTextChange(String arg0) {
+				noteSearch(arg0);
+				return true;
+			}
+		});
+
+		MenuItem addCategory = menu.findItem(R.id.action_add_note);
+		addCategory.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		addCategory.setIcon(R.drawable.ic_add_black);
+
+		
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.action_add_note:
+	        	createNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
+				createNoteIntent.putExtra("categoryId", categoryId);
+				startActivityForResult(createNoteIntent, 2);
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 
 	@SuppressWarnings("static-access")
 	protected void noteSearchForCategory(){
 		noteAdapter = new NoteListAdapter(NoteListActivity.this,MyDatabaseHelper.getInstance(context).getAllNotesForCategory(categoryId));
-		setListAdapter(noteAdapter);
+		lv.setAdapter(noteAdapter);
 	}
 
 	@SuppressWarnings("static-access")
 	private void noteSearch(String string) {
 
 		noteAdapter = new NoteListAdapter(NoteListActivity.this, MyDatabaseHelper.getInstance(context).getNotesForSearch(string,categoryId));
-		setListAdapter(noteAdapter);
+		lv.setAdapter(noteAdapter);
 
 	}
 
@@ -183,43 +179,7 @@ public class NoteListActivity extends ListActivity implements OnItemSelectedList
 
 		if (requestCode == 2) {
 			noteAdapter = new NoteListAdapter(NoteListActivity.this,MyDatabaseHelper.getInstance(context).getAllNotesForCategory(categoryId));
-			setListAdapter(noteAdapter);
-		}
-	}
-
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		Log.i("e1","");
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.note_list_menu, menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-		Note not = (Note) getListAdapter().getItem(info.position);
-
-		switch (item.getItemId()) {
-//		case R.id.modifyListNote:
-//
-//			Intent modifyNoteIntent = new Intent(NoteListActivity.this, CreateNoteActivity.class);
-//			modifyNoteIntent.putExtra("noteName", not.getTitle());
-//			modifyNoteIntent.putExtra("noteText", not.getText());
-//			modifyNoteIntent.putExtra("noteId", not.getId());
-//			modifyNoteIntent.putExtra("noteDate", not.getDate());
-//			modifyNoteIntent.putExtra("modifyFlag", true);
-//			startActivityForResult(modifyNoteIntent, 2);
-//
-//			return true;
-		case R.id.deleteListNote:
-			deleteNote(not);
-			return true;
-		default:
-
-			return super.onContextItemSelected(item);
+			lv.setAdapter(noteAdapter);
 		}
 	}
 
@@ -231,9 +191,7 @@ public class NoteListActivity extends ListActivity implements OnItemSelectedList
 		noteAdapter = new NoteListAdapter(NoteListActivity.this,
 				MyDatabaseHelper.getInstance(context).getAllNotesForCategory(categoryId));
 
-		setListAdapter(noteAdapter);
-
-
+		lv.setAdapter(noteAdapter);
 	}
 
 	@Override
@@ -250,7 +208,7 @@ public class NoteListActivity extends ListActivity implements OnItemSelectedList
 			noteAdapter = new NoteListAdapter(NoteListActivity.this,
 					MyDatabaseHelper.getInstance(context).getNotesOrderByDate(categoryId));
 
-			setListAdapter(noteAdapter);
+			lv.setAdapter(noteAdapter);
 			
 		}
 		
@@ -258,7 +216,7 @@ public class NoteListActivity extends ListActivity implements OnItemSelectedList
 			noteAdapter = new NoteListAdapter(NoteListActivity.this,
 					MyDatabaseHelper.getInstance(context).getAllNotesForCategory(categoryId));
 
-			setListAdapter(noteAdapter);
+			lv.setAdapter(noteAdapter);
 			
 		}
 		
@@ -266,14 +224,42 @@ public class NoteListActivity extends ListActivity implements OnItemSelectedList
 			noteAdapter = new NoteListAdapter(NoteListActivity.this,
 					MyDatabaseHelper.getInstance(context).getNotesOrderByRating(categoryId));
 
-			setListAdapter(noteAdapter);
+			lv.setAdapter(noteAdapter);
 			
 		}
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
 		
+	}
+	
+	class ActionBarCallBack implements ActionMode.Callback {
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.action_delete_note:
+				deleteNote(note);
+				mode.finish();
+				break;
+			}
+			return false;
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			mode.getMenuInflater().inflate(R.menu.note_select_menu, menu);
+			return true;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
 	}
 }

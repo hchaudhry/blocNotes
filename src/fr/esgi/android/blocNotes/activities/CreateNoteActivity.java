@@ -1,13 +1,13 @@
 package fr.esgi.android.blocNotes.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
@@ -16,14 +16,13 @@ import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Note;
 
-public class CreateNoteActivity extends Activity 
+public class CreateNoteActivity extends ActionBarActivity 
 {
 
 
 	private static final String TITLE_INPUT_DATA = "titleInputData";
 	private static final String TEXT_INPUT_DATA = "textInputData";
 	private EditText noteTitleEditText ,noteTextEditText;
-	private Button noteAddBtn;
 	private boolean modifyFlag = false;
 	private int categoryId;
 	int noteId=0;
@@ -62,9 +61,6 @@ public class CreateNoteActivity extends Activity
 			noteTextEditText.setText(textInputSaved);
 		}
 		
-		noteAddBtn = (Button) findViewById(R.id.btnCreateNote);
-		noteAddBtn.setText(R.string.noteCreateBtnTitle);
-
 		if (this.getIntent().getStringExtra("noteName") != null ){
 			
 			String noteName = this.getIntent().getStringExtra("noteName");
@@ -82,47 +78,8 @@ public class CreateNoteActivity extends Activity
 			noteDateTextView.append(noteDate);
 			noteImportance.setRating(Float.parseFloat(noteRate.getRating()));
 			
-			noteAddBtn.setText(R.string.modifyNoteBtnTitle);
 		}
-		
-
 		categoryId = this.getIntent().getIntExtra("categoryId", 1);
-
-		noteAddBtn.setOnClickListener(new OnClickListener() {
-
-			@SuppressWarnings("static-access")
-			@Override
-			public void onClick(View v) {
-				
-				Note toCreate = new Note();
-				toCreate.setTitle(noteTitleEditText.getText().toString());
-				toCreate.setCategoryId(categoryId);
-				toCreate.setText(noteTextEditText.getText().toString());
-				toCreate.setRating(String.valueOf(noteImportanceValue));
-				
-				// update or add note
-				if(modifyFlag==true){
-					//update note
-					toCreate.setId(noteId);
-					MyDatabaseHelper.getInstance(context).updateNote(toCreate);
-
-
-				}
-				else{ 
-					//Add note
-					MyDatabaseHelper.getInstance(context).addNote(toCreate);
-					
-//					Calendar calendrier = Calendar.getInstance();
-//					Log.i("Time","l'ann�e :"+Integer.toString(calendrier.get(Calendar.YEAR))+" et le mois "+Integer.toString(calendrier.get(Calendar.MONTH))+" et le jour "+Integer.toString(calendrier.get(Calendar.DAY_OF_MONTH)));
-
-				}
-
-				Intent intent = new Intent();
-				setResult(2,intent);  
-				finish();
-			}
-		});
-
 	}
 	
 	public void addListenerOnRatingBar() {
@@ -161,5 +118,49 @@ public class CreateNoteActivity extends Activity
 		}
 
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.note_add_menu, menu);
+	    
+	    MenuItem saveNote = menu.findItem(R.id.action_save_note);
+	    saveNote.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+	    saveNote.setIcon(R.drawable.ic_done_black);
+	    
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_save_note:
+			Note toCreate = new Note();
+			toCreate.setTitle(noteTitleEditText.getText().toString());
+			toCreate.setCategoryId(categoryId);
+			toCreate.setText(noteTextEditText.getText().toString());
+			toCreate.setRating(String.valueOf(noteImportanceValue));
+			
+			// update or add note
+			if(modifyFlag==true){
+				//update note
+				toCreate.setId(noteId);
+				MyDatabaseHelper.getInstance(context).updateNote(toCreate);
+			}
+			else{ 
+				//Add note
+				MyDatabaseHelper.getInstance(context).addNote(toCreate);
+			}
+
+			Intent intent = new Intent();
+			setResult(2,intent);  
+			finish();
+			
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }
