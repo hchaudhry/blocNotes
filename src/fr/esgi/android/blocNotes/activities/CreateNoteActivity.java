@@ -2,7 +2,6 @@ package fr.esgi.android.blocNotes.activities;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -167,9 +166,7 @@ public class CreateNoteActivity extends Fragment
 				MyDatabaseHelper.getInstance(context).addNote(toCreate);
 			}
 
-			Intent intent = new Intent();
-			getActivity().setResult(2,intent);  
-			getActivity().finish();
+			getFragmentManager().popBackStack();
 			
 			return true;
 		default:

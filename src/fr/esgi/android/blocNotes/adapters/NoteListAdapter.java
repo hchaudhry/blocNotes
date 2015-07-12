@@ -1,14 +1,8 @@
 package fr.esgi.android.blocNotes.adapters;
 
 import java.util.List;
-import java.util.Locale;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
