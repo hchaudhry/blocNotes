@@ -1,5 +1,6 @@
 package fr.esgi.android.blocNotes.activities;
 
+import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +9,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -21,7 +24,7 @@ import fr.esgi.android.blocNotes.adapters.CategoryListAdapter;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Category;
 
-public class CategoryListActivity extends ActionBarActivity {
+public class CategoryListActivity extends Fragment {
 
 
 	private CategoryListAdapter categoryAdapter;
@@ -32,18 +35,26 @@ public class CategoryListActivity extends ActionBarActivity {
 	private ActionMode mActionMode;
 	private int tagId;
 	private Category category;
-
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_category_list);
 		
-		context = this;
+		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+//		setContentView(R.layout.activity_category_list);
+		
+		context = getActivity().getApplicationContext();
 
 		// set title of this activity
-		setTitle(R.string.categoryScreenName);
+		//setTitle(R.string.categoryScreenName);
 	
-		lv = (ListView) findViewById(R.id.list_category);
+		lv = (ListView) getView().findViewById(R.id.list_category);
 
 		registerForContextMenu(lv);
 		
@@ -54,7 +65,7 @@ public class CategoryListActivity extends ActionBarActivity {
 				Category category = (Category) parent.getItemAtPosition(position);
 				tagId = category.getId();
 
-				Intent i = new Intent(CategoryListActivity.this, NoteListActivity.class);
+				Intent i = new Intent(getActivity(), NoteFragmentActivity.class);
 				i.putExtra("categoryId", tagId);
 				startActivityForResult(i, 2);
 			}
@@ -67,13 +78,27 @@ public class CategoryListActivity extends ActionBarActivity {
 				category = (Category) parent.getItemAtPosition(position);
 				tagId = category.getId();
 				
-				mActionMode = CategoryListActivity.this
+				ActionBarActivity activity = (ActionBarActivity) getActivity();
+				
+				mActionMode = activity
 						.startSupportActionMode(new ActionBarCallBack());
 				return true;
 			}
 		});
 		
 		SearchAllCategory();
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		//return super.onCreateView(inflater, container, savedInstanceState);
+		
+		if (container == null) {
+			return null;
+		}
+		View view = inflater.inflate(R.layout.activity_category_list, container, false);
+		return view;
 	}
 	
 	@Override
@@ -87,22 +112,22 @@ public class CategoryListActivity extends ActionBarActivity {
 
 	@SuppressWarnings("static-access")
 	protected void SearchAllCategory() {
-		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this,
+		categoryAdapter = new CategoryListAdapter(getActivity(),
 				MyDatabaseHelper.getInstance(context).getAllCategories());
 		lv.setAdapter(categoryAdapter);
 		
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		//MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.category_list_menu, menu);
 
-		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
 				.getActionView();
 		searchView.setSearchableInfo(searchManager
-				.getSearchableInfo(getComponentName()));
+				.getSearchableInfo(getActivity().getComponentName()));
 		searchView.setSubmitButtonEnabled(true);
 	    
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
@@ -123,7 +148,7 @@ public class CategoryListActivity extends ActionBarActivity {
 		addCategory.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		addCategory.setIcon(R.drawable.ic_add_black);
 
-		return super.onCreateOptionsMenu(menu);
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 	
 	@Override
@@ -131,7 +156,7 @@ public class CategoryListActivity extends ActionBarActivity {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_add_category:
-	        	createCategoryIntent = new Intent(CategoryListActivity.this, CreateCategoryActivity.class);
+	        	createCategoryIntent = new Intent(getActivity(), CreateCategoryActivity.class);
 				startActivityForResult(createCategoryIntent, 2);
 	            return true;
 	        default:
@@ -141,12 +166,12 @@ public class CategoryListActivity extends ActionBarActivity {
 
 	@SuppressWarnings("static-access")
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (requestCode == 2) {
 			categoryAdapter = new CategoryListAdapter(
-					CategoryListActivity.this, MyDatabaseHelper.getInstance(context).getAllCategories());
+					getActivity(), MyDatabaseHelper.getInstance(context).getAllCategories());
 			lv.setAdapter(categoryAdapter);
 		}
 	}
@@ -156,7 +181,7 @@ public class CategoryListActivity extends ActionBarActivity {
 
 		MyDatabaseHelper.getInstance(context).deleteCategory(idCategory);
 
-		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this,
+		categoryAdapter = new CategoryListAdapter(getActivity(),
 				MyDatabaseHelper.getInstance(context).getAllCategories());
 		lv.setAdapter(categoryAdapter);
 	}
@@ -164,7 +189,7 @@ public class CategoryListActivity extends ActionBarActivity {
 	@SuppressWarnings("static-access")
 	private void categorySearch(String categoryName){
 		System.out.println(categoryName);
-		categoryAdapter = new CategoryListAdapter(CategoryListActivity.this, MyDatabaseHelper.getInstance(context).getCategoriesForSearch(categoryName));
+		categoryAdapter = new CategoryListAdapter(getActivity(), MyDatabaseHelper.getInstance(context).getCategoriesForSearch(categoryName));
 		lv.setAdapter(categoryAdapter);
 	}
 	
@@ -178,7 +203,7 @@ public class CategoryListActivity extends ActionBarActivity {
 				mode.finish();
 				break;
 			case R.id.action_edit:
-				Intent modifyCategoryIntent = new Intent(CategoryListActivity.this, CreateCategoryActivity.class);
+				Intent modifyCategoryIntent = new Intent(getActivity(), CreateCategoryActivity.class);
 				modifyCategoryIntent.putExtra("categoryName", category.getName());
 				modifyCategoryIntent.putExtra("categoryId", category.getId());
 				modifyCategoryIntent.putExtra("modifyFlag", true);

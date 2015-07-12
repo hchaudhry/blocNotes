@@ -14,7 +14,7 @@
         android:label="Bloc Notes"
         android:theme="@style/Theme.AppCompat.Light" >
         
-        <activity android:name="fr.esgi.android.blocNotes.activities.CategoryListActivity" >
+        <activity android:name="fr.esgi.android.blocNotes.activities.CategoryFragmentActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,11 +24,15 @@
                 android:resource="@xml/searchable" />
         </activity>
         
+        <activity android:name="fr.esgi.android.blocNotes.activities.CategoryListActivity" >
+        </activity>
         <activity android:name="fr.esgi.android.blocNotes.activities.CreateCategoryActivity" >
         </activity>
         <activity android:name="fr.esgi.android.blocNotes.activities.NoteListActivity" >
         </activity>
         <activity android:name="fr.esgi.android.blocNotes.activities.CreateNoteActivity" >
+        </activity>
+        <activity android:name="fr.esgi.android.blocNotes.activities.NoteFragmentActivity" >
         </activity>
     </application>
 

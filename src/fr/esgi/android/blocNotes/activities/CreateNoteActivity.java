@@ -1,13 +1,15 @@
 package fr.esgi.android.blocNotes.activities;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
@@ -16,9 +18,8 @@ import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Note;
 
-public class CreateNoteActivity extends ActionBarActivity 
+public class CreateNoteActivity extends Fragment 
 {
-
 
 	private static final String TITLE_INPUT_DATA = "titleInputData";
 	private static final String TEXT_INPUT_DATA = "textInputData";
@@ -32,25 +33,27 @@ public class CreateNoteActivity extends ActionBarActivity
 	private float noteImportanceValue;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
+	public void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_create_note);
+		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 		
-		context = this;
-
-		//set title of this activity
-		setTitle(R.string.newNoteScreenName);
+		context = getActivity().getApplicationContext();
 		
 		addListenerOnRatingBar();
 
-		noteTitleEditText = (EditText) findViewById(R.id.noteTitleEditText);
+		noteTitleEditText = (EditText) getActivity().findViewById(R.id.noteTitleEditText);
 		noteTitleEditText.setHint(R.string.inputNoteTitleHint);
 		
-		noteTextEditText = (EditText) findViewById(R.id.noteTextEditText);
+		noteTextEditText = (EditText) getActivity().findViewById(R.id.noteTextEditText);
 		noteTextEditText.setHint(R.string.inputNoteTextHint);
 		
-		noteDateTextView = (TextView) findViewById(R.id.noteDateTextViewCreate);
+		noteDateTextView = (TextView) getActivity().findViewById(R.id.noteDateTextViewCreate);
 
 		if(savedInstanceState != null)
 		{
@@ -61,17 +64,17 @@ public class CreateNoteActivity extends ActionBarActivity
 			noteTextEditText.setText(textInputSaved);
 		}
 		
-		if (this.getIntent().getStringExtra("noteName") != null ){
+		if (getArguments().getString("noteName") != null ){
 			
-			String noteName = this.getIntent().getStringExtra("noteName");
-			String noteTexte = this.getIntent().getStringExtra("noteText");
-			String noteDate = this.getIntent().getStringExtra("noteDate");
+			String noteName = getArguments().getString("noteName");
+			String noteTexte = getArguments().getString("noteText");
+			String noteDate = getArguments().getString("noteDate");
 			
-			noteId = this.getIntent().getIntExtra("noteId", 1);
+			noteId = getArguments().getInt("noteId", 1);
 			
 			Note noteRate = MyDatabaseHelper.getInstance(context).getNote(noteId);
 			
-			modifyFlag = this.getIntent().getBooleanExtra("modifyFlag", false);
+			modifyFlag = getArguments().getBoolean("modifyFlag", false);
 			
 			noteTextEditText.setText(noteTexte);
 			noteTitleEditText.setText(noteName);
@@ -79,12 +82,23 @@ public class CreateNoteActivity extends ActionBarActivity
 			noteImportance.setRating(Float.parseFloat(noteRate.getRating()));
 			
 		}
-		categoryId = this.getIntent().getIntExtra("categoryId", 1);
+		categoryId = getActivity().getIntent().getIntExtra("categoryId", 1);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		
+		if (container == null) {
+			return null;
+		}
+		View view = inflater.inflate(R.layout.activity_create_note, container, false);
+		return view;
 	}
 	
 	public void addListenerOnRatingBar() {
 
-		noteImportance = (RatingBar) findViewById(R.id.noteRating);
+		noteImportance = (RatingBar) getActivity().findViewById(R.id.noteRating);
 	
 		noteImportance.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
 	
@@ -108,7 +122,7 @@ public class CreateNoteActivity extends ActionBarActivity
     	
     }
 
-	@Override
+	/*@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -118,18 +132,17 @@ public class CreateNoteActivity extends ActionBarActivity
 		}
 
 		return super.onKeyDown(keyCode, event);
-	}
+	}*/
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 	    inflater.inflate(R.menu.note_add_menu, menu);
 	    
 	    MenuItem saveNote = menu.findItem(R.id.action_save_note);
 	    saveNote.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 	    saveNote.setIcon(R.drawable.ic_done_black);
 	    
-	    return super.onCreateOptionsMenu(menu);
+	    super.onCreateOptionsMenu(menu, inflater);
 	}
 	
 	@Override
@@ -155,8 +168,8 @@ public class CreateNoteActivity extends ActionBarActivity
 			}
 
 			Intent intent = new Intent();
-			setResult(2,intent);  
-			finish();
+			getActivity().setResult(2,intent);  
+			getActivity().finish();
 			
 			return true;
 		default:

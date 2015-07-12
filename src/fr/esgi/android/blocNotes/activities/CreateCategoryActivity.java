@@ -12,7 +12,7 @@ import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Category;
 
-public class CreateCategoryActivity extends ActionBarActivity{
+public class CreateCategoryActivity extends ActionBarActivity {
 
 	private static final String NAME_INPUT_DATA = "nameInputData";
 	private EditText categoryName;
