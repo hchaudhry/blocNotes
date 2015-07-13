@@ -154,7 +154,7 @@ public class NoteListFragment extends Fragment implements OnItemSelectedListener
 	        	noteCreate.setArguments(bundle);
 	        	
 	        	FragmentTransaction transaction = getFragmentManager().beginTransaction();
-	        	transaction.replace(R.id.displayNoteList, noteCreate);
+	        	transaction.replace(R.id.displayNoteList, noteCreate, "Detail_fragment");
 	        	transaction.addToBackStack(null);
 	        	transaction.commit();
 	        	
@@ -177,18 +177,6 @@ public class NoteListFragment extends Fragment implements OnItemSelectedListener
 		lv.setAdapter(noteAdapter);
 
 	}
-
-	/*@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Intent intent = new Intent();
-			setResult(2,intent);  
-			finish();
-		}
-
-		return super.onKeyDown(keyCode, event);
-	}*/
 
 	@SuppressWarnings("static-access")
 	@Override

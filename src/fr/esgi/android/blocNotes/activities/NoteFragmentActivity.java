@@ -3,13 +3,12 @@ package fr.esgi.android.blocNotes.activities;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.models.Note;
 
 public class NoteFragmentActivity extends ActionBarActivity implements NoteListFragment.OnItemSelectedListener {
 
-	private boolean detailPage = false;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -24,44 +23,35 @@ public class NoteFragmentActivity extends ActionBarActivity implements NoteListF
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			ft.commit();
 		}
-		
-		/*if (findViewById(R.id.displayNoteDetails) != null) {
-			detailPage = true;
-			getFragmentManager().popBackStack();
-
-			CreateNoteActivity detailFragment = (CreateNoteActivity) getFragmentManager().findFragmentById(R.id.displayNoteDetails);
-			
-			if (detailFragment == null) {
-				FragmentTransaction ft = getFragmentManager().beginTransaction();
-				detailFragment = new CreateNoteActivity();
-				ft.replace(R.id.displayNoteDetails, detailFragment, "Detail_Fragment1");
-				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				ft.commit();
-			}
-		}*/
 	}
 
 	@Override
 	public void onItemSelected(Note n) {
+		Bundle bundle = new Bundle();
+		bundle.putString("noteName", n.getTitle());
+		bundle.putString("noteText", n.getText());
+		bundle.putString("noteDate", n.getDate());
+		bundle.putInt("noteId", n.getId());
+		bundle.putBoolean("modifyFlag", true);
+
+		CreateNoteFragment detailFragment = new CreateNoteFragment();
+		detailFragment.setArguments(bundle);
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.replace(R.id.displayNoteList, detailFragment, "Detail_fragment");
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.addToBackStack(null);
+		ft.commit();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
-		/*if (detailPage) {
-			CreateNoteActivity detailFragment = (CreateNoteActivity) getFragmentManager()
-					.findFragmentById(R.id.displayNoteDetails);
-		} else {*/
-			Bundle bundle = new Bundle();
-			bundle.putString("noteName", n.getTitle());
-			bundle.putString("noteText", n.getText());
-			bundle.putString("noteDate", n.getDate());
-			bundle.putInt("noteId", n.getId());
-			bundle.putBoolean("modifyFlag", true);
-			
-			CreateNoteFragment detailFragment = new CreateNoteFragment();
-			detailFragment.setArguments(bundle);
-			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			ft.replace(R.id.displayNoteList, detailFragment, "Detail_Fragment2");
-			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			ft.addToBackStack(null);
-			ft.commit();
-//		}
+		CreateNoteFragment myFragment = (CreateNoteFragment) getFragmentManager().findFragmentByTag("Detail_fragment");
+		if (myFragment != null && myFragment.isVisible() && keyCode == KeyEvent.KEYCODE_BACK) {
+			((CreateNoteFragment) myFragment).myOnKeyDown(keyCode);
+			return false;
+		}
+		
+		return super.onKeyDown(keyCode, event);
 	}
 }

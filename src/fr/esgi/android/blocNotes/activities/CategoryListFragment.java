@@ -154,7 +154,7 @@ public class CategoryListFragment extends Fragment {
 	        	CreateCategoryFragment categoryCreate = new CreateCategoryFragment();
 	        	
 	        	FragmentTransaction transaction = getFragmentManager().beginTransaction();
-	        	transaction.replace(R.id.displayCategoryList, categoryCreate);
+	        	transaction.replace(R.id.displayCategoryList, categoryCreate, "Detail_fragment");
 	        	transaction.addToBackStack(null);
 	        	transaction.commit();
 	        	

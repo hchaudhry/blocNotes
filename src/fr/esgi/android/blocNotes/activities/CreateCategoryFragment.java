@@ -1,6 +1,7 @@
 package fr.esgi.android.blocNotes.activities;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -107,4 +108,15 @@ public class CreateCategoryFragment extends Fragment {
 		}
 	}
 
+	public void myOnKeyDown(int key_code) {
+
+		CategoryListFragment categoryList = new CategoryListFragment();
+
+		FragmentTransaction transaction = getFragmentManager()
+				.beginTransaction();
+		transaction.replace(R.id.displayCategoryList, categoryList,
+				"List_Fragment");
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
 }

@@ -163,4 +163,16 @@ public class CreateNoteFragment extends Fragment
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	public void myOnKeyDown(int key_code) {
+
+		NoteListFragment noteList = new NoteListFragment();
+
+		FragmentTransaction transaction = getFragmentManager()
+				.beginTransaction();
+		transaction.replace(R.id.displayNoteList, noteList,
+				"List_Fragment");
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
 }
