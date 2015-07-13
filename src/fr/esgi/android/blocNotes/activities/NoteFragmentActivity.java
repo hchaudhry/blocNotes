@@ -6,7 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.models.Note;
 
-public class NoteFragmentActivity extends ActionBarActivity implements NoteListActivity.OnItemSelectedListener {
+public class NoteFragmentActivity extends ActionBarActivity implements NoteListFragment.OnItemSelectedListener {
 
 	private boolean detailPage = false;
 	
@@ -19,7 +19,7 @@ public class NoteFragmentActivity extends ActionBarActivity implements NoteListA
 		
 		if (savedInstanceState == null) {
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			NoteListActivity listFragment = new NoteListActivity();
+			NoteListFragment listFragment = new NoteListFragment();
 			ft.add(R.id.displayNoteList, listFragment, "List_Fragment");
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			ft.commit();
@@ -55,7 +55,7 @@ public class NoteFragmentActivity extends ActionBarActivity implements NoteListA
 			bundle.putInt("noteId", n.getId());
 			bundle.putBoolean("modifyFlag", true);
 			
-			CreateNoteActivity detailFragment = new CreateNoteActivity();
+			CreateNoteFragment detailFragment = new CreateNoteFragment();
 			detailFragment.setArguments(bundle);
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
 			ft.replace(R.id.displayNoteList, detailFragment, "Detail_Fragment2");

@@ -28,9 +28,9 @@
         </activity>
         <activity android:name="fr.esgi.android.blocNotes.activities.CreateCategoryFragment" >
         </activity>
-        <activity android:name="fr.esgi.android.blocNotes.activities.NoteListActivity" >
+        <activity android:name="fr.esgi.android.blocNotes.activities.NoteListFragment" >
         </activity>
-        <activity android:name="fr.esgi.android.blocNotes.activities.CreateNoteActivity" >
+        <activity android:name="fr.esgi.android.blocNotes.activities.CreateNoteFragment" >
         </activity>
         <activity android:name="fr.esgi.android.blocNotes.activities.NoteFragmentActivity" >
         </activity>

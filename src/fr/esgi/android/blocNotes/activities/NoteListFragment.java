@@ -28,7 +28,7 @@ import fr.esgi.android.blocNotes.adapters.NoteListAdapter;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Note;
 
-public class NoteListActivity extends Fragment implements OnItemSelectedListener
+public class NoteListFragment extends Fragment implements OnItemSelectedListener
 {
 
 	private NoteListAdapter noteAdapter;
@@ -147,7 +147,7 @@ public class NoteListActivity extends Fragment implements OnItemSelectedListener
 	    switch (item.getItemId()) {
 	        case R.id.action_add_note:
 	        	
-	        	CreateNoteActivity noteCreate = new CreateNoteActivity();
+	        	CreateNoteFragment noteCreate = new CreateNoteFragment();
 	        	
 	        	Bundle bundle = new Bundle();
 	        	bundle.putInt("categoryId", categoryId);

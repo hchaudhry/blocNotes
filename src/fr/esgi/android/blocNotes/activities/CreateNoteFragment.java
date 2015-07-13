@@ -19,7 +19,7 @@ import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Note;
 
-public class CreateNoteActivity extends Fragment 
+public class CreateNoteFragment extends Fragment 
 {
 
 	private static final String TITLE_INPUT_DATA = "titleInputData";
