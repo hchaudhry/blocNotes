@@ -4,6 +4,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.models.Note;
 
@@ -46,12 +47,9 @@ public class NoteFragmentActivity extends ActionBarActivity implements NoteListA
 	public void onItemSelected(Note n) {
 		
 		if (detailPage) {
-			Log.i("NoteFragmentActivity", "toto");
 			CreateNoteActivity detailFragment = (CreateNoteActivity) getFragmentManager()
 					.findFragmentById(R.id.displayNoteDetails);
 		} else {
-			Log.i("NoteFragmentActivity", "titi");
-			
 			Bundle bundle = new Bundle();
 			bundle.putString("noteName", n.getTitle());
 			bundle.putString("noteText", n.getText());

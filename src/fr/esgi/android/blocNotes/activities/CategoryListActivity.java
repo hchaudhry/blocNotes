@@ -1,6 +1,7 @@
 package fr.esgi.android.blocNotes.activities;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -47,12 +48,7 @@ public class CategoryListActivity extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-//		setContentView(R.layout.activity_category_list);
-		
 		context = getActivity().getApplicationContext();
-
-		// set title of this activity
-		//setTitle(R.string.categoryScreenName);
 	
 		lv = (ListView) getView().findViewById(R.id.list_category);
 
@@ -92,7 +88,6 @@ public class CategoryListActivity extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		//return super.onCreateView(inflater, container, savedInstanceState);
 		
 		if (container == null) {
 			return null;
@@ -120,7 +115,6 @@ public class CategoryListActivity extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		//MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.category_list_menu, menu);
 
 		SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
@@ -156,8 +150,14 @@ public class CategoryListActivity extends Fragment {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_add_category:
-	        	createCategoryIntent = new Intent(getActivity(), CreateCategoryActivity.class);
-				startActivityForResult(createCategoryIntent, 2);
+	        	
+	        	CreateCategoryActivity categoryCreate = new CreateCategoryActivity();
+	        	
+	        	FragmentTransaction transaction = getFragmentManager().beginTransaction();
+	        	transaction.replace(R.id.displayCategoryList, categoryCreate);
+	        	transaction.addToBackStack(null);
+	        	transaction.commit();
+	        	
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -203,11 +203,19 @@ public class CategoryListActivity extends Fragment {
 				mode.finish();
 				break;
 			case R.id.action_edit:
-				Intent modifyCategoryIntent = new Intent(getActivity(), CreateCategoryActivity.class);
-				modifyCategoryIntent.putExtra("categoryName", category.getName());
-				modifyCategoryIntent.putExtra("categoryId", category.getId());
-				modifyCategoryIntent.putExtra("modifyFlag", true);
-				startActivityForResult(modifyCategoryIntent, 2);
+				Bundle bundle = new Bundle();
+				bundle.putString("categoryName", category.getName());
+				bundle.putInt("categoryId", category.getId());
+				bundle.putBoolean("modifyFlag", true);
+				
+				CreateCategoryActivity detailFragment = new CreateCategoryActivity();
+				detailFragment.setArguments(bundle);
+				FragmentTransaction ft = getFragmentManager().beginTransaction();
+				ft.replace(R.id.displayCategoryList, detailFragment, "Detail_Fragment2");
+				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				ft.addToBackStack(null);
+				ft.commit();
+				
 				break;
 			}
 			return false;

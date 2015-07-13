@@ -1,18 +1,20 @@
 package fr.esgi.android.blocNotes.activities;
 
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Category;
 
-public class CreateCategoryActivity extends ActionBarActivity {
+public class CreateCategoryActivity extends Fragment {
 
 	private static final String NAME_INPUT_DATA = "nameInputData";
 	private EditText categoryName;
@@ -21,16 +23,18 @@ public class CreateCategoryActivity extends ActionBarActivity {
 	private Context context;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_create_category);
+		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 		
-		context = this;
+		context = getActivity().getApplicationContext();
 
-		// set title of this activity
-		setTitle(R.string.newCategoryScreenName);
-
-		categoryName = (EditText) findViewById(R.id.tagNameEditText);
+		categoryName = (EditText) getActivity().findViewById(R.id.tagNameEditText);
 		categoryName.setHint(R.string.inputCategoryHint);
 		
 		if(savedInstanceState != null)
@@ -39,12 +43,23 @@ public class CreateCategoryActivity extends ActionBarActivity {
 			categoryName.setText(nameInputSaved);
 		}
 		
-		if (this.getIntent().getStringExtra("categoryName") != null) {
-			String categoryNameFromList = this.getIntent().getStringExtra("categoryName");
-			categoryIdFromList = this.getIntent().getIntExtra("categoryId", 1);
-			modifyFlag = this.getIntent().getBooleanExtra("modifyFlag", false);
+		if (getArguments().getString("categoryName") != null) {
+			String categoryNameFromList = getArguments().getString("categoryName");
+			categoryIdFromList = getArguments().getInt("categoryId", 1);
+			modifyFlag = getArguments().getBoolean("modifyFlag", false);
 			categoryName.setText(categoryNameFromList);
 		}
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		
+		if (container == null) {
+			return null;
+		}
+		View view = inflater.inflate(R.layout.activity_create_category, container, false);
+		return view;
 	}
 	
 	
@@ -56,15 +71,15 @@ public class CreateCategoryActivity extends ActionBarActivity {
     }
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	    
 	    inflater.inflate(R.menu.category_add_menu, menu);
 	    
 	    MenuItem saveCategory = menu.findItem(R.id.action_save_category);
 	    saveCategory.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 	    saveCategory.setIcon(R.drawable.ic_done_black);
 	    
-	    return super.onCreateOptionsMenu(menu);
+	    super.onCreateOptionsMenu(menu, inflater);
 	}
 	
 	@Override
@@ -84,9 +99,8 @@ public class CreateCategoryActivity extends ActionBarActivity {
 				MyDatabaseHelper.getInstance(context).addTag(toCreate);
 			}
 
-			Intent intent = new Intent();
-			setResult(2, intent);
-			finish();
+			getFragmentManager().popBackStack();
+			
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

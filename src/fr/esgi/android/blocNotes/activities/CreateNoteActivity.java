@@ -1,8 +1,10 @@
 package fr.esgi.android.blocNotes.activities;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -121,18 +123,6 @@ public class CreateNoteActivity extends Fragment
     	
     }
 
-	/*@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Intent intent = new Intent();
-			setResult(2,intent);  
-			finish();
-		}
-
-		return super.onKeyDown(keyCode, event);
-	}*/
-	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 	    inflater.inflate(R.menu.note_add_menu, menu);
