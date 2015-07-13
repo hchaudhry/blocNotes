@@ -3,8 +3,6 @@ package fr.esgi.android.blocNotes.activities;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.KeyEvent;
 import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.models.Note;
 
@@ -27,7 +25,7 @@ public class NoteFragmentActivity extends ActionBarActivity implements NoteListA
 			ft.commit();
 		}
 		
-		if (findViewById(R.id.displayNoteDetails) != null) {
+		/*if (findViewById(R.id.displayNoteDetails) != null) {
 			detailPage = true;
 			getFragmentManager().popBackStack();
 
@@ -40,16 +38,16 @@ public class NoteFragmentActivity extends ActionBarActivity implements NoteListA
 				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 				ft.commit();
 			}
-		}
+		}*/
 	}
 
 	@Override
 	public void onItemSelected(Note n) {
 		
-		if (detailPage) {
+		/*if (detailPage) {
 			CreateNoteActivity detailFragment = (CreateNoteActivity) getFragmentManager()
 					.findFragmentById(R.id.displayNoteDetails);
-		} else {
+		} else {*/
 			Bundle bundle = new Bundle();
 			bundle.putString("noteName", n.getTitle());
 			bundle.putString("noteText", n.getText());
@@ -64,6 +62,6 @@ public class NoteFragmentActivity extends ActionBarActivity implements NoteListA
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			ft.addToBackStack(null);
 			ft.commit();
-		}
+//		}
 	}
 }
