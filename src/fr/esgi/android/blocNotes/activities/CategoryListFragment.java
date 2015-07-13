@@ -25,7 +25,7 @@ import fr.esgi.android.blocNotes.adapters.CategoryListAdapter;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Category;
 
-public class CategoryListActivity extends Fragment {
+public class CategoryListFragment extends Fragment {
 
 
 	private CategoryListAdapter categoryAdapter;
@@ -151,7 +151,7 @@ public class CategoryListActivity extends Fragment {
 	    switch (item.getItemId()) {
 	        case R.id.action_add_category:
 	        	
-	        	CreateCategoryActivity categoryCreate = new CreateCategoryActivity();
+	        	CreateCategoryFragment categoryCreate = new CreateCategoryFragment();
 	        	
 	        	FragmentTransaction transaction = getFragmentManager().beginTransaction();
 	        	transaction.replace(R.id.displayCategoryList, categoryCreate);
@@ -208,7 +208,7 @@ public class CategoryListActivity extends Fragment {
 				bundle.putInt("categoryId", category.getId());
 				bundle.putBoolean("modifyFlag", true);
 				
-				CreateCategoryActivity detailFragment = new CreateCategoryActivity();
+				CreateCategoryFragment detailFragment = new CreateCategoryFragment();
 				detailFragment.setArguments(bundle);
 				FragmentTransaction ft = getFragmentManager().beginTransaction();
 				ft.replace(R.id.displayCategoryList, detailFragment, "Detail_Fragment2");

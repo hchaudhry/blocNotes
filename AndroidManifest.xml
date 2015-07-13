@@ -24,9 +24,9 @@
                 android:resource="@xml/searchable" />
         </activity>
         
-        <activity android:name="fr.esgi.android.blocNotes.activities.CategoryListActivity" >
+        <activity android:name="fr.esgi.android.blocNotes.activities.CategoryListFragment" >
         </activity>
-        <activity android:name="fr.esgi.android.blocNotes.activities.CreateCategoryActivity" >
+        <activity android:name="fr.esgi.android.blocNotes.activities.CreateCategoryFragment" >
         </activity>
         <activity android:name="fr.esgi.android.blocNotes.activities.NoteListActivity" >
         </activity>

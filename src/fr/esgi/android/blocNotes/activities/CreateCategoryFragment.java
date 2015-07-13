@@ -14,7 +14,7 @@ import fr.esgi.android.blocNotes.R;
 import fr.esgi.android.blocNotes.datas.MyDatabaseHelper;
 import fr.esgi.android.blocNotes.models.Category;
 
-public class CreateCategoryActivity extends Fragment {
+public class CreateCategoryFragment extends Fragment {
 
 	private static final String NAME_INPUT_DATA = "nameInputData";
 	private EditText categoryName;
@@ -43,7 +43,7 @@ public class CreateCategoryActivity extends Fragment {
 			categoryName.setText(nameInputSaved);
 		}
 		
-		if (getArguments().getString("categoryName") != null) {
+		if (getArguments() != null) {
 			String categoryNameFromList = getArguments().getString("categoryName");
 			categoryIdFromList = getArguments().getInt("categoryId", 1);
 			modifyFlag = getArguments().getBoolean("modifyFlag", false);

@@ -17,7 +17,7 @@ public class CategoryFragmentActivity extends ActionBarActivity {
 
 		if (savedInstanceState == null) {
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			CategoryListActivity listFragment = new CategoryListActivity();
+			CategoryListFragment listFragment = new CategoryListFragment();
 			ft.add(R.id.displayCategoryList, listFragment, "List_Fragment");
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			ft.commit();
